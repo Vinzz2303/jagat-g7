@@ -1,0 +1,61 @@
+# ============================================================================
+# JAGAT AI — Sovereign Infrastructure Container Stack
+# Stage 3: Proprietary System (Isolated Memory Components)
+# ============================================================================
+# Services:
+#   - Qdrant Vector DB  → Long-term episodic & semantic memory
+#   - Redis 7 Alpine    → Multi-agent message brokering & session cache
+# ============================================================================
+
+version: "3.9"
+
+services:
+  # --------------------------------------------------------------------------
+  # QDRANT — Vector Memory Engine
+  # --------------------------------------------------------------------------
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: jagat_qdrant
+    restart: always
+    ports:
+      - "127.0.0.1:6333:6333"   # REST API
+      - "127.0.0.1:6334:6334"   # gRPC
+    volumes:
+      - jagat_qdrant_storage:/qdrant/storage
+    environment:
+      - QDRANT__SERVICE__GRPC_PORT=6334
+      - QDRANT__SERVICE__HTTP_PORT=6333
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:6333/healthz || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 15s
+
+  # --------------------------------------------------------------------------
+  # REDIS — Agent Message Broker & Ephemeral Cache
+  # --------------------------------------------------------------------------
+  redis:
+    image: redis:7-alpine
+    container_name: jagat_redis
+    restart: always
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - jagat_redis_cache:/data
+    command: redis-server --appendonly yes --maxmemory 2gb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+# ----------------------------------------------------------------------------
+# PERSISTENT VOLUMES
+# ----------------------------------------------------------------------------
+volumes:
+  jagat_qdrant_storage:
+    name: jagat_qdrant_storage
+  jagat_redis_cache:
+    name: jagat_redis_cache

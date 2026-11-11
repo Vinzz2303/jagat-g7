@@ -1,0 +1,67 @@
+{
+  "manifest_id": "jagat-g7-phase3-wave1-founder-strategic-core",
+  "phase": "3B",
+  "status": "curated",
+  "created_at": "2026-05-20",
+  "curated_by": "AI Builder",
+  "approved_owner": "Faturachman Al Kahfi",
+  "policy": {
+    "ingest_now": false,
+    "next_phase": "3C",
+    "required_before_ingest": [
+      "digitalization",
+      "normalization",
+      "extraction_report"
+    ]
+  },
+  "documents": [
+    {
+      "id": "JAGAT-W1-001",
+      "status": "curated",
+      "title": "JAGAT G7 Technical Blueprint",
+      "source": "jagat-g7-technical-blueprint",
+      "category": "blueprint",
+      "doc_type": "pdf",
+      "owner": "Faturachman Al Kahfi",
+      "created_at": "2026-05-20",
+      "trust_level": "founder_verified",
+      "provenance": "local file from founder workstation Downloads folder",
+      "notes": "Core technical architecture reference for Phase 3 memory ingestion.",
+      "local_path": "C:\\Users\\Administrator\\Downloads\\JAGAT_G7_Technical_Blueprint.pdf",
+      "sha256": "A64FD879DE116A376D03D84DE595CDA6E13240D4434F71080A2C32F7C8B6040E",
+      "size_bytes": 91670
+    },
+    {
+      "id": "JAGAT-W1-002",
+      "status": "curated",
+      "title": "JAGAT G7 Sovereign Roadmap",
+      "source": "jagat-g7-sovereign-roadmap",
+      "category": "roadmap",
+      "doc_type": "pdf",
+      "owner": "Faturachman Al Kahfi",
+      "created_at": "2026-05-20",
+      "trust_level": "founder_verified",
+      "provenance": "local file from founder workstation Downloads folder",
+      "notes": "Strategic roadmap reference for execution sequencing and long-term direction.",
+      "local_path": "C:\\Users\\Administrator\\Downloads\\JAGAT G7 Sovereign Roadmap.pdf",
+      "sha256": "2E1BD914218CBC344F7FAED07AE7E43E8AAEDEA25CB192B9FE3273B8245D17BE",
+      "size_bytes": 1901895
+    },
+    {
+      "id": "JAGAT-W1-003",
+      "status": "curated",
+      "title": "JAGAT G7 Project Milestones V5",
+      "source": "jagat-g7-project-milestones-v5",
+      "category": "milestone",
+      "doc_type": "xlsx",
+      "owner": "Faturachman Al Kahfi",
+      "created_at": "2026-05-20",
+      "trust_level": "founder_verified",
+      "provenance": "local file from founder workstation Downloads folder",
+      "notes": "Milestone tracking reference for delivery progress and project status.",
+      "local_path": "C:\\Users\\Administrator\\Downloads\\JAGAT_G7_Project_Milestones_V5.xlsx",
+      "sha256": "AC35564E96D5EFAAAB852BBF2D3F35660461544E8E3385F09F0EC87BB337E5FC",
+      "size_bytes": 11663
+    }
+  ]
+}

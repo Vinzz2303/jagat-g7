@@ -1,0 +1,20 @@
+# Local secrets and runtime-generated data
+.env
+.env.*
+!.env.example
+node_modules/
+dist/
+.next/
+data/
+qdrant_data/
+snapshots/
+wa-auth-state/
+.openclaw/
+*.sqlite*
+*.db*
+*.log
+*.tsbuildinfo
+*.mp3
+*.zip
+*.tar.gz
+scratch_email.cjs

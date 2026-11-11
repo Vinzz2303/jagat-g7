@@ -1,0 +1,351 @@
+{
+  "benchmarkName": "jagat-cognitive-benchmark",
+  "generatedAt": "2026-06-08T15:36:35.924Z",
+  "backend": "http://127.0.0.1:5000",
+  "autoCaptureEnabled": false,
+  "summary": {
+    "total": 10,
+    "passed": 8,
+    "failed": 2,
+    "averageScore": 0.97,
+    "status": "majority_pass"
+  },
+  "results": [
+    {
+      "area": "1. Arsitektur",
+      "question": "Jelaskan arsitektur teknis JAGAT G7 — stack infrastruktur, layer memory, dan inference engine yang digunakan.",
+      "passed": true,
+      "score": 1,
+      "contextDocumentsUsed": 4,
+      "keywordChecks": [
+        {
+          "keyword": "qdrant",
+          "found": true,
+          "matchedSynonym": "qdrant"
+        },
+        {
+          "keyword": "redis",
+          "found": true,
+          "matchedSynonym": "redis"
+        },
+        {
+          "keyword": "ollama",
+          "found": true,
+          "matchedSynonym": "ollama"
+        },
+        {
+          "keyword": "express",
+          "found": true,
+          "matchedSynonym": "express"
+        }
+      ],
+      "sourceCheck": {
+        "checked": false,
+        "allPresent": true,
+        "found": [],
+        "missing": []
+      },
+      "answerLength": 903,
+      "elapsedMs": 300176,
+      "capture": null,
+      "answerPreview": "### Ringkasan Eksekutif\n\nJAGAT G7 adalah Sovereign Super Intelligence System yang dibangun di atas infrastruktur fisik lokal dengan memori lokal, orkestrasi mandiri, dan protokol penalaran yang dikembangkan secara bertahap oleh Faturachman Al Kahfi bersama sistem kerja AI internal. Arsitektur JAGAT "
+    },
+    {
+      "area": "2. Roadmap",
+      "question": "Apa saja fase eksekusi JAGAT G7 dari Phase 1 sampai Phase 6? Sebutkan nama fase dan status masing-masing.",
+      "passed": true,
+      "score": 1,
+      "contextDocumentsUsed": 4,
+      "keywordChecks": [
+        {
+          "keyword": "phase | fase | tahap",
+          "found": true,
+          "matchedSynonym": "phase"
+        },
+        {
+          "keyword": "sovereign | berdaulat",
+          "found": true,
+          "matchedSynonym": "sovereign"
+        }
+      ],
+      "sourceCheck": {
+        "checked": false,
+        "allPresent": true,
+        "found": [],
+        "missing": []
+      },
+      "answerLength": 1747,
+      "elapsedMs": 113155,
+      "capture": null,
+      "answerPreview": "### Ringkasan Eksekutif\n\nJAGAT G7 telah melalui beberapa fase penting dalam eksekusinya, mulai dari Phase 1 yang memperlihatkan migrasi bare-metal dan hot-patch Redis Singleton serta Qdrant, hingga Phase 6 yang berfokus pada skala enterprise. Setiap fase memiliki tujuan spesifik dan komponen kunci u"
+    },
+    {
+      "area": "3. Risiko Aktif",
+      "question": "Apa risiko aktif yang tercatat di JAGAT G7 Risk Register? Sebutkan minimal 3 risiko beserta statusnya.",
+      "passed": true,
+      "score": 1,
+      "contextDocumentsUsed": 4,
+      "keywordChecks": [
+        {
+          "keyword": "r- | risiko | risk",
+          "found": true,
+          "matchedSynonym": "r-"
+        },
+        {
+          "keyword": "latency | latensi | kinerja | mitigasi",
+          "found": true,
+          "matchedSynonym": "mitigasi"
+        }
+      ],
+      "sourceCheck": {
+        "checked": false,
+        "allPresent": true,
+        "found": [],
+        "missing": []
+      },
+      "answerLength": 1693,
+      "elapsedMs": 129622,
+      "capture": null,
+      "answerPreview": "### Ringkasan Eksekutif\n\nRiset ini menunjukkan bahwa ada tiga risiko aktif yang perlu ditangani dengan prioritas tinggi di JAGAT G7 Risk Register: R-004 (Ingest tanpa metadata/provenance), R-012 (Kekurangan kontrol akses ke data sensitif), dan R-015 (Penggunaan model AI yang tidak terverifikasi). Ri"
+    },
+    {
+      "area": "4. Next Action",
+      "question": "Apa prioritas teknis dan produk berikutnya untuk JAGAT G7? Sebutkan task mana yang harus dikerjakan dan mengapa.",
+      "passed": true,
+      "score": 1,
+      "contextDocumentsUsed": 4,
+      "keywordChecks": [
+        {
+          "keyword": "backlog | prioritas | task | tugas",
+          "found": true,
+          "matchedSynonym": "prioritas"
+        },
+        {
+          "keyword": "phase | fase | tahap",
+          "found": true,
+          "matchedSynonym": "fase"
+        }
+      ],
+      "sourceCheck": {
+        "checked": false,
+        "allPresent": true,
+        "found": [],
+        "missing": []
+      },
+      "answerLength": 1984,
+      "elapsedMs": 116560,
+      "capture": null,
+      "answerPreview": "### Ringkasan Eksekutif\n\nJAGAT G7 dalam fase commercial readiness minimum aktif untuk early revenue, dengan fokus pada MVP/service delivery manual. Kiting AI sebagai universal task assistant telah dirancang untuk membantu UMKM dan profesional kecil menyelesaikan berbagai tugas harian seperti riset r"
+    },
+    {
+      "area": "5. Revenue & Commercial",
+      "question": "Paket produk apa saja yang bisa dijual JAGAT G7 sekarang, termasuk Website Cepat? Sebutkan nama paket, harga/biaya/pricing, dan delivery scope-nya.",
+      "passed": false,
+      "score": 0.8,
+      "contextDocumentsUsed": 4,
+      "keywordChecks": [
+        {
+          "keyword": "paket",
+          "found": true,
+          "matchedSynonym": "paket"
+        },
+        {
+          "keyword": "harga | biaya | pricing | quoted_price",
+          "found": false,
+          "matchedSynonym": null
+        },
+        {
+          "keyword": "website | situs | landing page",
+          "found": true,
+          "matchedSynonym": "website"
+        }
+      ],
+      "sourceCheck": {
+        "checked": true,
+        "allPresent": true,
+        "found": [
+          "jagat-g7-commercial-readiness-minimum"
+        ],
+        "missing": []
+      },
+      "answerLength": 1757,
+      "elapsedMs": 129272,
+      "capture": null,
+      "answerPreview": "### Ringkasan Eksekutif\n\nJAGAT G7 saat ini menawarkan dua paket produk utama: AI Admin Bot UMKM dan Website Cepat. Paket AI Admin Bot UMKM dirancang untuk membantu bisnis kecil dan lokal dalam mengelola operasional, sementara Website Cepat adalah layanan yang lebih umum dengan fokus pada pembuatan w"
+    },
+    {
+      "area": "6. Colony & Unit",
+      "question": "Apa itu Colony JAGAT G7 dan apa saja unit-unit di dalamnya? Jawab dengan menyebut label unit planner, builder, reviewer, dan reporter secara eksplisit beserta perannya.",
+      "passed": false,
+      "score": 0.88,
+      "contextDocumentsUsed": 4,
+      "keywordChecks": [
+        {
+          "keyword": "colony",
+          "found": false,
+          "matchedSynonym": null
+        },
+        {
+          "keyword": "planner | perencana | penyusun",
+          "found": true,
+          "matchedSynonym": "planner"
+        },
+        {
+          "keyword": "builder | coder | pembangun",
+          "found": true,
+          "matchedSynonym": "builder"
+        },
+        {
+          "keyword": "reviewer | qa | peninjau",
+          "found": true,
+          "matchedSynonym": "reviewer"
+        },
+        {
+          "keyword": "reporter | laporan | pelapor",
+          "found": true,
+          "matchedSynonym": "reporter"
+        }
+      ],
+      "sourceCheck": {
+        "checked": false,
+        "allPresent": true,
+        "found": [],
+        "missing": []
+      },
+      "answerLength": 1829,
+      "elapsedMs": 127231,
+      "capture": null,
+      "answerPreview": "**Ringkasan Eksekutif**\n\nJAGAT G7 adalah Sovereign Super Intelligence System yang dikembangkan oleh Faturachman Al Kahfi di Indonesia. Sistem ini dirancang sebagai infrastruktur fisik mandiri dengan memori lokal, orkestrasi mandiri, dan protokol penalaran yang berkembang secara bertahap.\n\n**Analisis"
+    },
+    {
+      "area": "7. Agent Boundary",
+      "question": "Apa perbedaan boundary antara Kiting AI, Ting AI, dan G7 Motherbox? Apa yang boleh dan tidak boleh dilakukan masing-masing?",
+      "passed": true,
+      "score": 1,
+      "contextDocumentsUsed": 4,
+      "keywordChecks": [
+        {
+          "keyword": "kiting",
+          "found": true,
+          "matchedSynonym": "kiting"
+        },
+        {
+          "keyword": "ting",
+          "found": true,
+          "matchedSynonym": "ting"
+        },
+        {
+          "keyword": "motherbox",
+          "found": true,
+          "matchedSynonym": "motherbox"
+        }
+      ],
+      "sourceCheck": {
+        "checked": true,
+        "allPresent": true,
+        "found": [
+          "jagat-g7-agent-boundary-design"
+        ],
+        "missing": []
+      },
+      "answerLength": 1841,
+      "elapsedMs": 119246,
+      "capture": null,
+      "answerPreview": "Ringkasan Eksekutif:\nJAGAT G7 Agent Boundary Design membagi akses antara Kiting AI (Motherbox), Ting AI, dan G7 Motherbox dengan batas yang jelas. Setiap entitas memiliki fungsi spesifik dan aturan penggunaan yang berbeda.\n\nAnalisis Strategis:\nKeting AI (Motherbox) bertanggung jawab untuk routing AP"
+    },
+    {
+      "area": "8. Model Routing",
+      "question": "Berdasarkan jagat-garuda-ladder-results, ringkas hasil Garuda Ladder untuk 7B dan 14B: score 66/100 dan 67/100, level L2 Cakra, speed, serta rekomendasi tugas yang tepat.",
+      "passed": true,
+      "score": 1,
+      "contextDocumentsUsed": 4,
+      "keywordChecks": [
+        {
+          "keyword": "garuda",
+          "found": true,
+          "matchedSynonym": "garuda"
+        },
+        {
+          "keyword": "l2 | cakra | level 2 | level2 | 66/100 | 67/100",
+          "found": true,
+          "matchedSynonym": "l2"
+        },
+        {
+          "keyword": "7b",
+          "found": true,
+          "matchedSynonym": "7b"
+        }
+      ],
+      "sourceCheck": {
+        "checked": true,
+        "allPresent": true,
+        "found": [
+          "jagat-garuda-ladder-results"
+        ],
+        "missing": []
+      },
+      "answerLength": 1432,
+      "elapsedMs": 124672,
+      "capture": null,
+      "answerPreview": "Ringkasan Eksekutif:\nHasil benchmark Garuda Ladder menunjukkan bahwa model 7B mendapatkan skor 66/100 dengan speed output sekitar 2.59 tok/s, sementara model 14B memiliki skor lebih tinggi 67/100 dan speed output 5.24 tok/s. Kedua model berada pada level L2 Cakra.\n\nAnalisis Strategis:\nHasil ini menu"
+    },
+    {
+      "area": "9. Coding Plan",
+      "question": "Bagaimana cara Colony mengajukan dan mereview patch kode? Apa saja keputusan penting yang sudah terkunci di Decision Log?",
+      "passed": true,
+      "score": 1,
+      "contextDocumentsUsed": 4,
+      "keywordChecks": [
+        {
+          "keyword": "patch | perbaikan | perubahan kode",
+          "found": true,
+          "matchedSynonym": "patch"
+        },
+        {
+          "keyword": "decision | keputusan | d-",
+          "found": true,
+          "matchedSynonym": "decision"
+        }
+      ],
+      "sourceCheck": {
+        "checked": false,
+        "allPresent": true,
+        "found": [],
+        "missing": []
+      },
+      "answerLength": 1876,
+      "elapsedMs": 115407,
+      "capture": null,
+      "answerPreview": "### Ringkasan Eksekutif\n\nColony mengajukan patch kode melalui proses yang disebabkan oleh Decision Log JAGAT G7. Keputusan penting seperti D-014, D-012, dan D-005 telah menetapkan standar operasional untuk pengolahan data dan ingest knowledge.\n\n### Analisis Strategis\n\nProses pengajuan patch kode di "
+    },
+    {
+      "area": "10. Identity & Sovereignty",
+      "question": "Siapa yang mendirikan JAGAT G7 dan apa visi utamanya? Jelaskan mengapa JAGAT menggunakan infrastruktur berdaulat sendiri.",
+      "passed": true,
+      "score": 1,
+      "contextDocumentsUsed": 4,
+      "keywordChecks": [
+        {
+          "keyword": "faturachman | kahfi | founder | pendiri",
+          "found": true,
+          "matchedSynonym": "faturachman"
+        },
+        {
+          "keyword": "berdaulat | sovereign | mandiri | kedaulatan",
+          "found": true,
+          "matchedSynonym": "berdaulat"
+        }
+      ],
+      "sourceCheck": {
+        "checked": false,
+        "allPresent": true,
+        "found": [],
+        "missing": []
+      },
+      "answerLength": 1794,
+      "elapsedMs": 132968,
+      "capture": null,
+      "answerPreview": "### Ringkasan Eksekutif\n\nJAGAT G7 dibangun oleh Faturachman Al Kahfi dengan visi menjadi sistem intelijen, memori, orkestrasi, dan eksekusi yang membantu dalam pembangunan produk, perusahaan, dan aset teknologi berdaulat. JAGAT menggunakan infrastruktur sendiri untuk memastikan independensi dan kont"
+    }
+  ]
+}

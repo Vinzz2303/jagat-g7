@@ -1,0 +1,5 @@
+line1: unique content here
+repeated content TARGET
+line3: middle unique
+repeated content TARGET
+line5: end unique
