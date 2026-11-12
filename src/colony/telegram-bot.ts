@@ -179,18 +179,9 @@ async function evaluateJagatIntent(text: string, history: string[]): Promise<str
 
   const prompt = `Konteks obrolan sebelumnya:\n${history.slice(-3).join('\n')}\n\nPesan User saat ini:\n"${text}"\n\nTentukan intent dari pesan di atas!`;
   try {
-    const res = await HybridRouter.callGroqFast(prompt, JAGAT_ROUTER_PROMPT, false);
-    const cleaned = res.replace(/```json/g, '').replace(/```/g, '').trim();
-    const payload = cleaned.match(/\{[\s\S]*\}/)?.[0] || cleaned;
-    let parsed;
-    try {
-      parsed = JSON.parse(payload);
-    } catch (parseError) {
-      const recoveredIntent = cleaned.match(/"intent"\s*:\s*"(CASUAL_CHAT|FIND_PROSPECT|START_SWARM|IT_COMMAND|FIND_VENTURE|JARVIS_MODE)"/);
-      if (!recoveredIntent) throw parseError;
-      console.warn("[JAGAT ROUTER] Recovered intent from malformed JSON.");
-      parsed = { intent: recoveredIntent[1] };
-    }
+    const res = await HybridRouter.callGroqFast(prompt, JAGAT_ROUTER_PROMPT, true);
+    // Do not recover executable intents from partial or malformed model output.
+    const parsed = JSON.parse(res);
     const allowed = ["CASUAL_CHAT", "FIND_PROSPECT", "START_SWARM", "IT_COMMAND", "FIND_VENTURE", "JARVIS_MODE"];
     return allowed.includes(parsed?.intent) ? parsed.intent : "CASUAL_CHAT";
   } catch (err) {
