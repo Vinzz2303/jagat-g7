@@ -3,7 +3,7 @@ import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { inspectCompany } from './prospect-discovery-agent-v1.mjs';
 import { topLeads } from './email-outreach-draft-agent-v1.mjs';
 import { campaignLeadEligibility } from './outreach-campaign-guard.mjs';
@@ -65,6 +65,32 @@ for (const label of ['Sponsored Advertisement', 'Website']) {
   check(redirectedLead.source.startsWith('official_site:'), label === 'Website');
 }
 
+// Same field structure as the RDP report's real IndonesiaYP HTML. Domains and
+// IDs are synthetic; no real company is contacted during this regression.
+const websiteAddressFixture = `<div class="info"><div class="label">Website address</div><div class="text weblinks"><a href="/redir/999999?u=www.synthetic.invalid" target="_blank" rel="noopener nofollow">www.synthetic.invalid</a></div></div>`;
+const adFixture = `<a href="/redir/8?u=advertiser.invalid">Sponsored Advertisement</a>`;
+for (const [html, expectedOfficial] of [
+  [websiteAddressFixture, true],
+  [adFixture + websiteAddressFixture, true],
+  [websiteAddressFixture.replace('Website address', 'Website'), true],
+  [websiteAddressFixture.replace('Website address', 'Sponsored Website address'), false],
+  [adFixture, false],
+]) {
+  const lead = await inspectCompany(directory, category, {
+    campaignPolicy: policy, validateMx: async () => true,
+    fetchPage: async url => url === directory
+      ? { html: `<title>Synthetic Business</title>${html}info@directory.invalid`, url }
+      : { html: role, url },
+  });
+  check(lead.source.startsWith('official_site:'), expectedOfficial);
+  check(campaignLeadEligibility(lead, policy).ok, expectedOfficial);
+  if (expectedOfficial) {
+    check(lead.website, 'https://www.synthetic.invalid/');
+    check(lead.public_contact, role);
+    check(lead.source, 'official_site:https://www.synthetic.invalid/');
+  }
+}
+
 const select = (leads, sent = new Set(), suppressed = new Set(), history = []) => topLeads(leads, sent, 5, suppressed, policy, history);
 for (const patch of [
   { source: `puppeteer_discovery:${directory}` },
@@ -85,7 +111,7 @@ check(campaignLeadEligibility(official, { ...policy, allowedRoleLocalParts: 'sal
 
 // Run actual draft CLI only on synthetic files; every fetch is denied by preload.
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const temp = await fs.mkdtemp(path.join(os.tmpdir(), 'jagat-provenance-'));
+const temp = await fs.mkdtemp(path.join(os.tmpdir(), 'jagat provenance #-'));
 const revenue = path.join(temp, 'ops/revenue');
 await fs.mkdir(revenue, { recursive: true });
 await fs.mkdir(path.join(temp, 'scripts'));
@@ -94,7 +120,7 @@ for (const name of ['email-outreach-draft-agent-v1.mjs', 'email-quality-guard.mj
 }
 const preload = path.join(temp, 'no-network.mjs');
 await fs.writeFile(preload, 'globalThis.fetch = async () => { throw new Error("Synthetic network block"); };');
-const run = () => spawnSync(process.execPath, ['--import', preload, 'scripts/email-outreach-draft-agent-v1.mjs', '--send-telegram'], { cwd: temp, encoding: 'utf8', env: { ...process.env, USERPROFILE: temp, TELEGRAM_BOT_TOKEN: 'synthetic-token', TELEGRAM_FOUNDER_CHAT_ID: 'synthetic' } });
+const run = () => spawnSync(process.execPath, ['--import', pathToFileURL(preload).href, 'scripts/email-outreach-draft-agent-v1.mjs', '--send-telegram'], { cwd: temp, encoding: 'utf8', env: { ...process.env, USERPROFILE: temp, TELEGRAM_BOT_TOKEN: 'synthetic-token', TELEGRAM_FOUNDER_CHAT_ID: 'synthetic' } });
 const headers = Object.keys(official);
 const csv = rows => [headers.join(','), ...rows.map(row => headers.map(key => JSON.stringify(row[key] ?? '')).join(','))].join('\n') + '\n';
 await fs.writeFile(path.join(revenue, 'PROSPECT_TRACKER.csv'), csv([directoryOnly, official]));
