@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 import fs from "node:fs/promises";
 import path from "node:path";
-import puppeteer from 'puppeteer';
+import { pathToFileURL } from 'node:url';
+import { campaignLeadEligibility, isValidCampaignPolicy, websiteHost } from './outreach-campaign-guard.mjs';
 import { resolveMx } from 'node:dns/promises';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -60,6 +61,7 @@ let browser = null;
 
 async function getBrowser() {
   if (!browser) {
+    const { default: puppeteer } = await import("puppeteer");
     browser = await puppeteer.launch({
       headless: "new",
       args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
@@ -68,20 +70,24 @@ async function getBrowser() {
   return browser;
 }
 
-async function fetchHtmlWithPuppeteer(url) {
+async function fetchPageWithPuppeteer(url) {
   const b = await getBrowser();
   const page = await b.newPage();
   try {
     await page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
-    await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
-    const content = await page.content();
-    return content;
+    const response = await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
+    if (!response?.ok()) return { html: '', url: page.url() };
+    return { html: await page.content(), url: page.url() };
   } catch (err) {
     console.error(`Error fetching ${url}: ${err.message}`);
-    return "";
+    return { html: "", url };
   } finally {
     await page.close();
   }
+}
+
+async function fetchHtmlWithPuppeteer(url) {
+  return (await fetchPageWithPuppeteer(url)).html;
 }
 
 async function hasValidMx(email) {
@@ -241,7 +247,7 @@ function extractEmails(text) {
     if (ignore.has(email) || email.endsWith(".png") || email.endsWith(".jpg") || email.includes("wixpress.com") || email.includes("yourdomain.com")) return false;
     // Basic junk filter
     if (email.startsWith("sentry@") || email.startsWith("noreply@") || email.startsWith("no-reply@") || email.startsWith("example@")) return false;
-    if (email.startsWith("test@") || email.startsWith("admin@") || email.startsWith("info@example")) return false;
+    if (email.startsWith("test@") || email.startsWith("info@example")) return false;
     return true;
   });
 }
@@ -254,27 +260,21 @@ function extractPhones(text) {
 }
 
 function extractWebsite(html) {
-  // Check IndonesianYP redirection link
-  const redirMatch = html.match(/\/redir\/\d+\?u=([^"'\s&]+)/i);
-  if (redirMatch?.[1]) {
-    const raw = decodeURIComponent(redirMatch[1]);
-    const normalized = raw.startsWith("http") ? raw : `https://${raw}`;
-    const url = safeUrl(normalized);
-    if (url && !url.hostname.includes("woomar.com") && !url.hostname.includes("indonesiayp.com")) {
-      return url.toString();
-    }
-  }
-
+  // Only the directory's explicit business Website field/link is a candidate
+  // official site. Arbitrary /redir links can be sponsored advertisements.
   const website = firstMatch(html, [
     /Website\s*<\/[^>]+>\s*<[^>]+>\s*<a[^>]+href=["']([^"']+)["']/i,
-    /href=["'](https?:\/\/(?!www\.indonesiayp\.com)[^"']+)["'][^>]*>\s*Website/i,
+    /<a\b[^>]*href=["']([^"']+)["'][^>]*>\s*Website\s*<\/a>/i,
   ]);
-  const url = safeUrl(website || "");
+  let url = safeUrl(website, BASE);
+  if (!website || !url) return "-";
+  if (url.hostname.replace(/^www\./, '') === 'indonesiayp.com' && /^\/redir\/\d+$/.test(url.pathname)) {
+    const target = url.searchParams.get('u') || '';
+    url = safeUrl(/^https?:\/\//i.test(target) ? target : `https://${target}`);
+  }
   if (!url) return "-";
-  
-  const ignoredHosts = ["fonts.googleapis.com", "schema.org", "w3.org", "google.com", "gstatic.com", "facebook.com", "instagram.com", "wa.me", "api.whatsapp.com", "woomar.com"];
-  if (ignoredHosts.some(host => url.hostname.includes(host))) return "-";
-  
+  const ignoredHosts = ["indonesiayp.com", "fonts.googleapis.com", "schema.org", "w3.org", "google.com", "gstatic.com", "facebook.com", "instagram.com", "wa.me", "api.whatsapp.com", "woomar.com"];
+  if (ignoredHosts.some(host => url.hostname === host || url.hostname.endsWith(`.${host}`))) return "-";
   return url.toString();
 }
 
@@ -315,21 +315,24 @@ function contactPageCandidates(website) {
   return paths.map((suffix) => new URL(suffix, base.origin).toString());
 }
 
-async function findEmailsFromWebsite(website) {
-  const emails = new Set();
+export async function findEmailsFromWebsite(website, { fetchPage = fetchPageWithPuppeteer } = {}) {
+  const observations = [];
   const checked = [];
   for (const url of contactPageCandidates(website).slice(0, 3)) {
     try {
       console.log(`  [Puppeteer] Crawling ${url}`);
-      const html = await fetchHtmlWithPuppeteer(url);
-      checked.push(url);
-      for (const email of extractEmails(html)) emails.add(email);
-      if (emails.size >= 1) break;
+      const page = await fetchPage(url);
+      checked.push(page.url || url);
+      // Cross-domain redirects do not prove official-site provenance.
+      if (!page.html || websiteHost(page.url) !== websiteHost(website)) continue;
+      for (const email of extractEmails(page.html)) {
+        if (!observations.some(item => item.email === email)) observations.push({ email, sourceUrl: page.url });
+      }
     } catch {
-      // Many small business sites block bots or have missing contact pages.
+      // Missing/blocked pages provide no provenance evidence.
     }
   }
-  return { emails: [...emails], checked };
+  return { emails: observations.map(item => item.email), observations, checked };
 }
 
 function businessNameFromUrl(url) {
@@ -343,9 +346,9 @@ function buildProblem(niche, hasWebsite, hasEmail) {
   return `Bisnis ${niche} punya presence publik; cocok ditawarkan audit AI readiness dan automasi admin ringan.`;
 }
 
-async function inspectCompany(url, category) {
+export async function inspectCompany(url, category, { fetchPage = fetchPageWithPuppeteer, validateMx = hasValidMx, campaignPolicy = null } = {}) {
   console.log(`[Puppeteer] Inspecting directory page: ${url}`);
-  const html = await fetchHtmlWithPuppeteer(url);
+  const { html } = await fetchPage(url);
   if (!html) return null;
   
   const text = stripTags(html);
@@ -358,13 +361,17 @@ async function inspectCompany(url, category) {
   const directoryWebsite = extractWebsite(html);
   const externalWebsite = directoryWebsite !== "-" ? directoryWebsite : extractExternalLinks(html, url)[0] || "-";
   
-  const siteLookup = externalWebsite !== "-" ? await findEmailsFromWebsite(externalWebsite) : { emails: [], checked: [] };
-  const allEmails = [...new Set([...pageEmails, ...siteLookup.emails])];
+  const siteLookup = externalWebsite !== "-" ? await findEmailsFromWebsite(externalWebsite, { fetchPage }) : { emails: [], observations: [], checked: [] };
+  const officialSource = (email) => directoryWebsite !== "-" && email.split('@')[1] === websiteHost(directoryWebsite)
+    ? siteLookup.observations.find(item => item.email === email)?.sourceUrl : undefined;
+  const eligibleRole = (email) => campaignLeadEligibility({ status: 'email_found', public_contact: email, website: directoryWebsite, source: `official_site:${officialSource(email) || ''}` }, campaignPolicy).ok;
+  const allEmails = [...new Set([...siteLookup.emails, ...pageEmails])]
+    .sort((a, b) => Number(eligibleRole(b)) - Number(eligibleRole(a)) || Number(Boolean(officialSource(b))) - Number(Boolean(officialSource(a))));
   
   // Anti-bounce MX Validation filter
   const validEmails = [];
   for (const e of allEmails) {
-    if (await hasValidMx(e)) {
+    if (await validateMx(e)) {
       validEmails.push(e);
       break; // Just need one good email
     } else {
@@ -387,7 +394,7 @@ async function inspectCompany(url, category) {
     company_or_person: name,
     website: externalWebsite,
     public_contact: contact,
-    source: `puppeteer_discovery:${url}`,
+    source: officialSource(contact) ? `official_site:${officialSource(contact)}` : `puppeteer_discovery:${url}`,
     problem_hypothesis: buildProblem(category.niche, hasWebsite, hasEmail),
     offer: category.offer,
     recommended_message: `Halo Kak, saya Faturachman dari JAGAT AI. Saya lihat ${name} cocok untuk ${category.offer}; boleh saya kirim demo ringan tentang AI admin/website?`,
@@ -395,7 +402,7 @@ async function inspectCompany(url, category) {
     quoted_price: "",
     response: "",
     follow_up_due: "",
-    notes: `Autodiscovered via Puppeteer. Email=${hasEmail ? "yes" : "no"}. Checked=${siteLookup.checked.length} website pages. MX Validated.`,
+    notes: `Directory=${url}. Email evidence=${officialSource(contact) || "directory/unverified external link"}. Autodiscovered via Puppeteer. Email=${hasEmail ? "yes" : "no"}. Checked=${siteLookup.checked.length} website pages. MX Validated.`,
   };
 }
 
@@ -420,6 +427,8 @@ async function discover() {
   const { headers, rows } = parseCsv(trackerRaw);
   if (!headers.length) throw new Error("Tracker CSV headers not found.");
 
+  const candidatePolicy = await readJson(path.join(REVENUE_DIR, "AUTO_SEND_POLICY.json"), null);
+  const campaignPolicy = isValidCampaignPolicy(candidatePolicy) ? candidatePolicy : null;
   const state = await readJson(STATE_PATH, { nextPages: {}, nextCategoryIndex: 0, lastRunAt: "" });
   const existing = new Set(rows.flatMap(leadKeys));
   const discovered = [];
@@ -458,7 +467,7 @@ async function discover() {
         if (Date.now() >= deadline) break;
         try {
           inspected += 1;
-          const lead = await inspectCompany(url, category);
+          const lead = await inspectCompany(url, category, { campaignPolicy });
           if (!lead) continue;
           const keys = leadKeys(lead);
           if (keys.some((key) => existing.has(key))) {
@@ -532,7 +541,7 @@ async function discover() {
   console.log(`REPORT=${REPORT_PATH}`);
 }
 
-discover().catch((err) => {
+if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) discover().catch((err) => {
   if (browser) browser.close();
   console.error("PROSPECT_DISCOVERY=FAIL");
   console.error(err instanceof Error ? err.message : String(err));
