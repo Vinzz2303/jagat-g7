@@ -5,9 +5,8 @@ import { isPlausibleOutreachEmail } from "./email-quality-guard.mjs";
 import {
   computeDraftHash,
   buildEventKey,
-  isEventAlreadySent,
-  recordTelegramEvent,
 } from "./telegram-event-guard.mjs";
+import { sendRevenueTelegram, runRevenueNotification } from "./revenue-notification.mjs";
 
 const ROOT = process.cwd();
 const REVENUE_DIR = path.join(ROOT, "ops", "revenue");
@@ -450,7 +449,7 @@ async function sendTelegram(markdown) {
 
   // === TELEGRAM EVENT DEDUPLICATION (WP-A) ===
   // Key incorporates: lead_id, campaign_id, draft_version (content hash), event_type
-  const draftVersion = computeDraftHash(message);
+  const draftVersion = computeDraftHash(message.split("\n").slice(1).join("\n"));
   const topLeadIds = allLeads.slice(0, 3).map((l) => l.company_or_person).join('_');
   const eventKey = buildEventKey({
     lead_id: topLeadIds,
@@ -459,39 +458,17 @@ async function sendTelegram(markdown) {
     event_type: 'REVENUE_BRIEF',
   });
 
-  const alreadySent = await isEventAlreadySent(eventKey);
-  if (alreadySent) {
-    console.log(`[TelegramGuard] REVENUE_BRIEF already delivered for key "${eventKey}". Skipping redundant broadcast.`);
-    return { skipped: true, eventKey };
-  }
-
-  const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      chat_id: chatId,
-      text: message,
-      disable_web_page_preview: true,
-    }),
-    signal: AbortSignal.timeout(30_000),
+  return sendRevenueTelegram({
+    botToken, chatId, text: message,
+    event: {
+      event_key: eventKey,
+      lead_id: topLeadIds,
+      campaign_id: 'camp-id-b2b-q4',
+      draft_version: draftVersion,
+      event_type: 'REVENUE_BRIEF',
+      summary: `Daily Revenue Brief for ${allLeads.length} leads`,
+    },
   });
-
-  if (!response.ok) {
-    const text = await response.text().catch(() => response.statusText);
-    throw new Error(`Telegram send failed (${response.status}): ${text}`);
-  }
-
-  await recordTelegramEvent({
-    event_key: eventKey,
-    lead_id: topLeadIds,
-    campaign_id: 'camp-id-b2b-q4',
-    draft_version: draftVersion,
-    event_type: 'REVENUE_BRIEF',
-    summary: `Daily Revenue Brief for ${allLeads.length} leads`,
-  });
-
-  console.log(`[TelegramGuard] REVENUE_BRIEF delivered and recorded in ledger (event_key: "${eventKey}").`);
-  return { skipped: false, eventKey };
 }
 
 async function main() {
@@ -537,14 +514,14 @@ async function main() {
     await fs.writeFile(outputPath, finalBrief, "utf8");
     await fs.writeFile(LATEST_PATH, finalBrief, "utf8");
 
-    if (shouldSendTelegram) {
-      await sendTelegram(finalBrief);
-    }
+    await runRevenueNotification({
+      enabled: shouldSendTelegram, eventType: 'REVENUE_BRIEF',
+      send: () => sendTelegram(finalBrief),
+    });
 
     console.log(`REVENUE_AGENT=PASS`);
     console.log(`REPORT=${outputPath}`);
     console.log(`LATEST=${LATEST_PATH}`);
-    console.log(`TELEGRAM_SENT=${shouldSendTelegram ? "true" : "false"}`);
     return;
   }
 
