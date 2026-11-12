@@ -21,8 +21,9 @@ await fs.copyFile(source, path.join(temp, 'scripts/revenue-outreach-email.mjs'))
 await fs.copyFile(processorSource, path.join(temp, 'scripts/process-approved-outreach.mjs'));
 await fs.copyFile(approveSource, path.join(temp, 'scripts/approve-outreach-draft.mjs'));
 await fs.copyFile(emailGuardSource, path.join(temp, 'scripts/email-quality-guard.mjs'));
+await fs.copyFile(path.join(root, 'scripts/outreach-campaign-guard.mjs'), path.join(temp, 'scripts/outreach-campaign-guard.mjs'));
 for (const name of ['EMAIL_ENTERPRISE_ID.html', 'EMAIL_ENTERPRISE_EN.html']) {
-  await fs.copyFile(path.join(root, 'ops/outreach', name), path.join(temp, 'ops/outreach', name));
+  await fs.writeFile(path.join(temp, 'ops/outreach', name), '<p>Synthetic test template for {{company_or_person}}</p>');
 }
 const to = `smoke-${randomUUID()}@example.invalid`;
 const payload = { to, subject: 'JAGAT fake SMTP smoke', text: 'Local-only test', html: '<p>Local-only test</p>' };
@@ -125,7 +126,27 @@ await fs.writeFile(path.join(temp, 'ops/revenue/outreach-send-ledger.jsonl'), ''
 const autoResult = await runSender(processorArgs);
 const autoLedger = (await fs.readFile(path.join(temp, 'ops/revenue/outreach-send-ledger.jsonl'), 'utf8')).trim().split(/\r?\n/).map(line => JSON.parse(line));
 if (autoResult.code !== 0 || autoLedger.map(event => event.status).join(',') !== 'attempted,sent' || autoLedger.some(event => event.approvalMode !== 'founder_campaign_policy' || event.campaignPolicyVersion !== '2026-11-07-v1')) throw new Error(`Automatic policy sender smoke failed; artifacts: ${temp}\n${autoResult.stdout}\n${autoResult.stderr}`);
-console.log(JSON.stringify({ status: 'PASS', target: to, statuses: ledger.map(event => event.status), mismatch: 'rejected', suppression: 'blocked at approval and send; idempotent opt-out', dailyCap: '5 attempts enforced', automaticPolicy: 'one eligible role inbox sent via fake SMTP', telegram: 'captured locally', duplicate: 'blocked', smtp: 'fake adapter only', artifacts: temp }));
+// Campaign negatives exercise the actual sender, never the real adapters.
+const autoArgs = [args[0], autoTo, '--campaign-auto', '--confirm-send'];
+const rollingCap = await runSender(autoArgs);
+if (rollingCap.code !== 2 || !rollingCap.stdout.includes('one-email-per-24-hours')) throw new Error(`Rolling campaign cap failed; artifacts: ${temp}`);
+const oldTs = new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString();
+await fs.writeFile(path.join(temp, 'ops/revenue/outreach-send-ledger.jsonl'), JSON.stringify({ status: 'unknown', to: autoTo, company: 'Acme', ts: oldTs }) + '\n');
+const previousRecipient = await runSender(autoArgs);
+if (previousRecipient.code !== 2 || !previousRecipient.stdout.includes('already contacted')) throw new Error(`Campaign prior recipient was not blocked; artifacts: ${temp}`);
+await fs.writeFile(path.join(temp, 'ops/revenue/outreach-send-ledger.jsonl'), '');
+for (const [sourceValue, responseValue] of [
+  ['puppeteer_discovery:https://directory.invalid/company', ''],
+  ['official_site:https://unrelated.invalid', ''],
+  ['official_site:https://acme.co.id', 'STOP'],
+]) {
+  await fs.writeFile(path.join(temp, 'ops/revenue/PROSPECT_TRACKER.csv'), `status,public_contact,response,company_or_person,website,source\nemail_found,${autoTo},${responseValue},Acme,https://acme.co.id,${sourceValue}\n`);
+  const blocked = await runSender(autoArgs);
+  if (blocked.code !== 2) throw new Error(`Campaign provenance/refusal did not block; artifacts: ${temp}`);
+}
+const unchangedLedger = await fs.readFile(path.join(temp, 'ops/revenue/outreach-send-ledger.jsonl'), 'utf8');
+if (unchangedLedger !== '') throw new Error(`Blocked campaign attempted SMTP; artifacts: ${temp}`);
+console.log(JSON.stringify({ status: 'PASS', target: to, statuses: ledger.map(event => event.status), mismatch: 'rejected', suppression: 'blocked at approval and send; idempotent opt-out', dailyCap: '5 attempts enforced', automaticPolicy: 'fake SMTP success; rolling cap, duplicate, provenance mismatch and STOP blocked', telegram: 'captured locally', duplicate: 'blocked', smtp: 'fake adapter only', artifacts: temp }));
 
 
 
