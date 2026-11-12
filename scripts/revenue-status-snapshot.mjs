@@ -42,7 +42,8 @@ export function parseJsonl(raw) {
 
 function lastEvent(events, eventType) {
   const matching = events.filter(event => event.event_type === eventType && Number.isFinite(Date.parse(event.sent_at)));
-  matching.sort((a, b) => Date.parse(b.sent_at) - Date.parse(a.sent_at));
+  // Append order resolves equal timestamps (ATTEMPTED and outcome can share a millisecond).
+  matching.reverse().sort((a, b) => Date.parse(b.sent_at) - Date.parse(a.sent_at));
   return matching[0] ? { status: matching[0].status || 'UNKNOWN', sentAt: matching[0].sent_at } : { status: 'UNKNOWN', sentAt: null };
 }
 
