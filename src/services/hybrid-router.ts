@@ -1,12 +1,13 @@
 // @ts-nocheck
 import { ollamaService } from './ollama.js';
 import * as dotenv from 'dotenv';
+import { normalizeModelResponse } from './model-response.js';
 dotenv.config();
 
 export class HybridRouter {
   
   /**
-   * Fast logic using Groq (Llama-3-8b-8192)
+   * Fast logic using Groq (Llama 3.1 8B Instant)
    * Perfect for rapid decisions (e.g., Browser Agent clicking)
    */
   static async callGroqFast(prompt: string, systemContext: string = "You are a helpful assistant.", jsonMode: boolean = false): Promise<string> {
@@ -18,7 +19,7 @@ export class HybridRouter {
 
     try {
       const body: any = {
-        model: "llama3-8b-8192",
+        model: "llama-3.1-8b-instant",
         messages: [
           { role: "system", content: systemContext },
           { role: "user", content: prompt }
@@ -36,7 +37,8 @@ export class HybridRouter {
           "Authorization": `Bearer ${apiKey}`,
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
+        signal: AbortSignal.timeout(30_000)
       });
 
       if (!response.ok) {
@@ -45,7 +47,7 @@ export class HybridRouter {
       }
 
       const data = await response.json();
-      return data.choices[0].message.content.trim();
+      return normalizeModelResponse(data?.choices?.[0]?.message?.content, jsonMode);
     } catch (err) {
       console.error("[HybridRouter] Groq failed, falling back to local Ollama.", err);
       return this.fallbackToOllama(prompt, systemContext, jsonMode);
@@ -53,7 +55,7 @@ export class HybridRouter {
   }
 
   /**
-   * Deep reasoning using Gemini 1.5 Flash
+   * Deep reasoning using Gemini 2.5 Flash
    * Perfect for B2B Copywriting and deep text analysis
    */
   static async callGeminiSmart(prompt: string, systemContext: string = "You are a helpful assistant."): Promise<string> {
@@ -71,7 +73,8 @@ export class HybridRouter {
           system_instruction: { parts: { text: systemContext } },
           contents: [{ parts: [{ text: prompt }] }],
           generationConfig: { temperature: 0.7 }
-        })
+        }),
+        signal: AbortSignal.timeout(30_000)
       });
 
       if (!response.ok) {
@@ -79,7 +82,7 @@ export class HybridRouter {
       }
 
       const data = await response.json();
-      return data.candidates[0].content.parts[0].text.trim();
+      return normalizeModelResponse(data?.candidates?.[0]?.content?.parts?.map((part: any) => part.text || "").join(""), false);
     } catch (err) {
       console.error("[HybridRouter] Gemini failed, falling back to local Ollama.", err);
       return this.fallbackToOllama(prompt, systemContext, false);
@@ -95,9 +98,11 @@ export class HybridRouter {
       prompt,
       systemContext,
       process.env.INFERENCE_MODEL || 'qwen2.5:7b',
-      { temperature: jsonMode ? 0.1 : 0.7 }
+      { temperature: jsonMode ? 0.1 : 0.7 },
+      undefined,
+      format
     );
-    return res.response.trim();
+    return normalizeModelResponse(res.response, jsonMode);
   }
 
   /**
@@ -134,9 +139,11 @@ export class HybridRouter {
           system_instruction: { parts: { text: systemContext } },
           contents: [{ parts: parts }],
           generationConfig: { 
-            temperature: 0.1
+            temperature: 0.1,
+            responseMimeType: "application/json"
           }
-        })
+        }),
+        signal: AbortSignal.timeout(30_000)
       });
 
       if (!response.ok) {
@@ -145,7 +152,7 @@ export class HybridRouter {
       }
 
       const data = await response.json();
-      return data.candidates[0].content.parts[0].text.trim();
+      return normalizeModelResponse(data?.candidates?.[0]?.content?.parts?.map((part: any) => part.text || "").join(""), true);
     } catch (err) {
       console.error("[HybridRouter] Agentic Gemini failed, falling back to local Ollama.", err);
       // Fallback: gunakan Ollama lokal agar bot tidak mati diam-diam
