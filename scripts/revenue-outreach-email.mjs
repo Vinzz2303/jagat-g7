@@ -4,6 +4,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import * as dotenv from 'dotenv';
 import { isPlausibleOutreachEmail } from './email-quality-guard.mjs';
+import { campaignLeadEligibility, hasOutreachRefusal, isValidCampaignPolicy } from './outreach-campaign-guard.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -107,13 +108,6 @@ async function loadSuppressedEmails() {
   return new Set(rows.map(row => String(row.email || '').trim().toLowerCase()).filter(Boolean));
 }
 
-function hasOutreachRefusal(lead) {
-  const status = String(lead.status || '').trim().toLowerCase();
-  const refusedStatuses = ['emailed', 'sent', 'suppressed', 'unsubscribed', 'rejected', 'declined', 'do_not_contact', 'opted_out', 'closed_lost', 'not_interested'];
-  const response = String(lead.response || '');
-  return refusedStatuses.includes(status) || /\b(?:not interested|do not contact|unsubscribe|remove me|stop emailing|tidak tertarik|jangan hubungi|berhenti berlangganan|hapus alamat email)\b/i.test(response);
-}
-
 async function assertRecipientStillEligible(email) {
   const { rows } = parseCsv(await fs.readFile(TRACKER_PATH, 'utf8'));
   const lead = rows.find((row) => String(row.public_contact || '').trim().toLowerCase() === email.trim().toLowerCase());
@@ -122,15 +116,11 @@ async function assertRecipientStillEligible(email) {
 
 async function validateAutomaticCampaign(email) {
   const policy = JSON.parse(await fs.readFile(AUTO_SEND_POLICY_PATH, 'utf8'));
-  if (!policy.enabled || policy.policyVersion !== '2026-11-07-v1' || policy.authorizedBy !== 'Faturachman Al Kahfi' || policy.maxPerCycle !== 1 || policy.maxPerDay !== 1 || policy.followups !== false) return { ok: false, reason: 'campaign policy is disabled or invalid' };
+  if (!isValidCampaignPolicy(policy)) return { ok: false, reason: 'campaign policy is disabled or invalid' };
   const { rows } = parseCsv(await fs.readFile(TRACKER_PATH, 'utf8'));
   const lead = rows.find(row => String(row.public_contact || '').trim().toLowerCase() === email.trim().toLowerCase());
-  if (!lead || hasOutreachRefusal(lead) || !['new', 'email_found', 'demo_ready'].includes(String(lead.status || '').toLowerCase())) return { ok: false, reason: 'lead status/refusal does not allow automated contact' };
-  const [local, domain] = email.trim().toLowerCase().split('@');
-  const freeDomains = new Set(['gmail.com', 'yahoo.com', 'yahoo.co.id', 'outlook.com', 'hotmail.com', 'live.com', 'icloud.com']);
-  let websiteHost = '';
-  try { websiteHost = new URL(lead.website).hostname.replace(/^www\./, '').toLowerCase(); } catch {}
-  if (!policy.allowedRoleLocalParts.includes(local) || freeDomains.has(domain) || !websiteHost || domain !== websiteHost || !String(lead.source || '').startsWith('official_site:')) return { ok: false, reason: 'recipient must be a role mailbox on the official website domain' };
+  const eligibility = campaignLeadEligibility(lead, policy);
+  if (!eligibility.ok) return eligibility;
   if (await getOutreachAttemptsInWindow(24 * 60 * 60 * 1000) >= 1) return { ok: false, reason: 'one-email-per-24-hours campaign limit reached' };
   const ledger = (await fs.readFile(LEDGER_PATH, 'utf8').catch(() => '')).replace(/^\uFEFF/, '');
   const company = String(lead.company_or_person || '').toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
