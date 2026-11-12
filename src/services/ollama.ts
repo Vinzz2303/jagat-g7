@@ -154,6 +154,7 @@ export class OllamaService {
     model = "llama3",
     options?: OllamaGenerationOptions,
     signal?: AbortSignal,
+    format?: "json",
   ): Promise<OllamaGenerateResponse> {
     if (!prompt.trim()) {
       throw new Error("[JAGAT:OLLAMA] Cannot generate from empty prompt.");
@@ -170,6 +171,7 @@ export class OllamaService {
       };
 
       if (options) body.options = options;
+      if (format) body.format = format;
 
       try {
         return await this.requestAt<OllamaGenerateResponse>(
