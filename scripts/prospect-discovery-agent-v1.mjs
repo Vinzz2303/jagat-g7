@@ -263,7 +263,7 @@ function extractWebsite(html) {
   // Only the directory's explicit business Website field/link is a candidate
   // official site. Arbitrary /redir links can be sponsored advertisements.
   const website = firstMatch(html, [
-    /Website\s*<\/[^>]+>\s*<[^>]+>\s*<a[^>]+href=["']([^"']+)["']/i,
+    />\s*Website(?:\s+address)?\s*<\/[^>]+>\s*<[^>]+>\s*<a[^>]+href=["']([^"']+)["']/i,
     /<a\b[^>]*href=["']([^"']+)["'][^>]*>\s*Website\s*<\/a>/i,
   ]);
   let url = safeUrl(website, BASE);
