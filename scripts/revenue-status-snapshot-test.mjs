@@ -59,5 +59,13 @@ check('disabled scheduler degrades otherwise healthy pipeline', buildRevenueStat
 check('failed scheduler run degrades pipeline', buildRevenueStatusSnapshot({ now, scheduledTask: normalizeScheduledTask({ State: 'Ready', LastTaskResult: 1 }), artifactTimes: { 'latest-prospect-discovery.md': now, 'latest-revenue-brief.md': now, 'OUTREACH_DRAFTS.json': now, 'OUTREACH_APPROVAL_INBOX.md': now }, telegramRaw: [JSON.stringify({ event_type: 'REVENUE_BRIEF', status: 'DELIVERED', sent_at: '2026-11-05T21:00:00Z' }), JSON.stringify({ event_type: 'EMAIL_DRAFT_BATCH', status: 'DELIVERED', sent_at: '2026-11-05T21:00:00Z' })].join('\n') }).overall === 'DEGRADED');
 const lateTask = normalizeScheduledTask({ State: 'Ready', LastRunTime: '2026-11-05T13:41:40-08:00', LastTaskResult: 0, NextRunTime: '2026-11-05T13:50:00-08:00' });
 check('missed scheduled run degrades otherwise fresh pipeline', buildRevenueStatusSnapshot({ now, scheduledTask: lateTask, artifactTimes: { 'latest-prospect-discovery.md': now, 'latest-revenue-brief.md': now, 'OUTREACH_DRAFTS.json': now, 'OUTREACH_APPROVAL_INBOX.md': now }, telegramRaw: [JSON.stringify({ event_type: 'REVENUE_BRIEF', status: 'DELIVERED', sent_at: '2026-11-05T21:00:00Z' }), JSON.stringify({ event_type: 'EMAIL_DRAFT_BATCH', status: 'DELIVERED', sent_at: '2026-11-05T21:00:00Z' })].join('\n') }).overall === 'DEGRADED');
+const tiedEvents = buildRevenueStatusSnapshot({ now, telegramRaw: [
+  { event_type: 'REVENUE_BRIEF', status: 'ATTEMPTED', sent_at: '2026-11-05T21:00:00.000Z' },
+  { event_type: 'REVENUE_BRIEF', status: 'DELIVERED', sent_at: '2026-11-05T21:00:00.000Z' },
+  { event_type: 'EMAIL_DRAFT_BATCH', status: 'ATTEMPTED', sent_at: '2026-11-05T21:00:00.000Z' },
+  { event_type: 'EMAIL_DRAFT_BATCH', status: 'UNKNOWN', sent_at: '2026-11-05T21:00:00.000Z' },
+].map(JSON.stringify).join('\n') });
+check('same-millisecond delivery uses latest appended state', tiedEvents.notifications.brief.status === 'DELIVERED');
+check('same-millisecond unknown is not hidden by attempted state', tiedEvents.notifications.draftBatch.status === 'UNKNOWN');
 console.log(`Revenue status snapshot: ${failures === 0 ? 'PASS' : 'FAIL'} (${failures} failures)`);
 if (failures) process.exitCode = 1;
