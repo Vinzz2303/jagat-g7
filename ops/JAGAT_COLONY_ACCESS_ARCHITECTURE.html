@@ -1,0 +1,624 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <title>JAGAT Document Export</title>
+  <style>
+    @page { size: A4; margin: 18mm 16mm 18mm 16mm; }
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: #0f172a;
+      line-height: 1.55;
+      font-size: 11pt;
+      background: #ffffff;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      color: #111827;
+      margin: 1.1em 0 0.45em;
+      line-height: 1.25;
+    }
+    h1 { font-size: 22pt; border-bottom: 2px solid #d1d5db; padding-bottom: 8px; }
+    h2 { font-size: 16pt; margin-top: 1.5em; }
+    h3 { font-size: 13pt; }
+    p { margin: 0.45em 0; }
+    ul, ol { margin: 0.45em 0 0.75em 1.25em; }
+    li { margin: 0.2em 0; }
+    code {
+      font-family: Consolas, "Courier New", monospace;
+      background: #f3f4f6;
+      padding: 1px 4px;
+      border-radius: 4px;
+      font-size: 0.95em;
+    }
+    pre {
+      background: #0f172a;
+      color: #e5e7eb;
+      padding: 12px 14px;
+      border-radius: 8px;
+      overflow: hidden;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 9.5pt;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.9em 0 1.1em;
+      font-size: 10pt;
+    }
+    th, td {
+      border: 1px solid #d1d5db;
+      padding: 8px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #f3f4f6;
+      font-weight: 600;
+    }
+    strong { color: #111827; }
+  </style>
+</head>
+<body>
+<h1>JAGAT Colony Access Architecture</h1>
+<h2>Status Dokumen</h2>
+<p>Dokumen ini menjelaskan arsitektur akses, permission layer, boundary publik vs internal, serta posisi Telegram dan identitas agent untuk JAGAT Colony.</p>
+<p>Dokumen ini dibuat agar seluruh anggota internal memahami bahwa colony adalah lapisan kerja internal yang tersembunyi, bukan fitur publik yang dibuka ke semua orang.</p>
+<p>Versi: 1.0 Tanggal: 2026-05-27 Status: Draft Internal untuk Penyelarasan Tim</p>
+<h2>Tujuan Dokumen</h2>
+<ol>
+<li>Menjelaskan siapa yang boleh mengakses layer internal JAGAT.</li>
+<li>Menjelaskan perbedaan UI publik dan founder/internal command layer.</li>
+<li>Menjelaskan posisi Telegram dalam arsitektur colony.</li>
+<li>Menjelaskan perbedaan identitas manusia internal dan identitas mesin/agent.</li>
+<li>Menjadi dasar keputusan implementasi keamanan dan permission sebelum coding besar dimulai.</li>
+</ol>
+<h2>Premis Utama</h2>
+<p>JAGAT G7 memiliki dua dunia yang berbeda:</p>
+<ol>
+<li><strong>Public/Product Surface</strong></li>
+<li><strong>Internal Founder &amp; Colony Surface</strong></li>
+</ol>
+<p>Keduanya boleh berada dalam satu ekosistem aplikasi JAGAT, tetapi tidak boleh bercampur dalam permission, data, maupun alur kerja.</p>
+<p>Prinsip tegas:</p>
+<ul>
+<li>publik tidak boleh melihat task colony</li>
+<li>publik tidak boleh melihat backlog internal</li>
+<li>publik tidak boleh melihat decision log internal</li>
+<li>publik tidak boleh melihat rapat internal founder</li>
+<li>publik tidak boleh melihat worker runtime, state queue, atau orchestration dapur</li>
+</ul>
+<h2>Struktur Layer Resmi</h2>
+<h3>Layer 1 - Public/Product Layer</h3>
+<p>Layer ini adalah permukaan yang dapat diakses user luar, calon klien, pengguna produk, atau audiens demo.</p>
+<p>Contoh isi:</p>
+<ul>
+<li>landing atau brand/product surface</li>
+<li>product showcase</li>
+<li>console user yang memang ditujukan ke publik</li>
+<li>fitur komersial dan customer-facing</li>
+<li>endpoint yang sudah disanitasi untuk pengguna luar</li>
+</ul>
+<p>Karakter layer ini:</p>
+<ul>
+<li>aman untuk ditampilkan</li>
+<li>tidak mengandung logika dapur internal</li>
+<li>tidak mengandung kontrol colony</li>
+<li>tidak mengandung jalur admin founder</li>
+</ul>
+<h3>Layer 2 - Founder/Internal Command Layer</h3>
+<p>Layer ini adalah permukaan kerja rahasia untuk founder, eksekutif internal, dan colony.</p>
+<p>Contoh isi:</p>
+<ul>
+<li>Founder Command Center</li>
+<li>Mission Board</li>
+<li>Task Queue</li>
+<li>Colony Roster</li>
+<li>Blocker Board</li>
+<li>Approval Center</li>
+<li>Risk and Audit Panel</li>
+<li>Internal Meeting Transcript</li>
+<li>Internal System Health</li>
+</ul>
+<p>Karakter layer ini:</p>
+<ul>
+<li>private</li>
+<li>role-gated</li>
+<li>audit-enabled</li>
+<li>tidak boleh terekspos publik</li>
+</ul>
+<h3>Layer 3 - Colony Runtime Layer</h3>
+<p>Layer ini bukan surface utama untuk user manusia, tetapi mesin kerja internal yang dipakai oleh agent AI.</p>
+<p>Contoh isi:</p>
+<ul>
+<li>planner runtime</li>
+<li>memory worker runtime</li>
+<li>coder worker runtime</li>
+<li>reviewer runtime</li>
+<li>reporter runtime</li>
+<li>scheduler</li>
+<li>queue engine</li>
+<li>machine-to-machine tokens</li>
+</ul>
+<p>Karakter layer ini:</p>
+<ul>
+<li>hidden</li>
+<li>service-to-service</li>
+<li>bukan login publik</li>
+<li>semua aktivitas wajib tercatat</li>
+</ul>
+<h3>Layer 4 - Remote Notification / Control Bridge</h3>
+<p>Layer ini dipakai untuk akses cepat, mobile, dan notifikasi.</p>
+<p>Contoh:</p>
+<ul>
+<li>Telegram</li>
+<li>future mobile alerts</li>
+<li>future executive push notifications</li>
+</ul>
+<p>Karakter:</p>
+<ul>
+<li>bukan workspace utama</li>
+<li>bukan tempat kerja coding berat</li>
+<li>bukan pusat operasi colony</li>
+</ul>
+<h2>Model Akses Resmi</h2>
+<h3>A. Human Internal Access</h3>
+<p>Akses untuk manusia internal.</p>
+<p>Aktor utama:</p>
+<ul>
+<li>Faturachman Al Kahfi</li>
+<li>Saint Christoper Shyandon</li>
+<li>Pak Haero Fiatna</li>
+</ul>
+<p>Mekanisme:</p>
+<ul>
+<li>login internal</li>
+<li>session/token privat</li>
+<li>role-based access control</li>
+<li>audit log untuk aktivitas penting</li>
+</ul>
+<h3>B. Machine / Agent Access</h3>
+<p>Akses untuk agent colony.</p>
+<p>Mekanisme:</p>
+<ul>
+<li>machine identity</li>
+<li>worker token internal</li>
+<li>service credentials</li>
+<li>tidak dipakai untuk login browser publik</li>
+</ul>
+<p>Agent tidak boleh memakai jalur akses publik sebagai jalur kerja utama.</p>
+<h2>Founder Token Operating Mode</h2>
+<p>JAGAT harus memiliki mode operasi khusus saat berinteraksi melalui akses token founder atau executive internal yang sah.</p>
+<p>Mode ini bukan mode publik biasa. Dalam mode ini, JAGAT dan colony boleh bekerja dengan kapasitas nalar yang lebih luas, lebih strategis, dan lebih bebas dalam membantu pengambilan keputusan, selama tetap tunduk pada struktur otoritas internal.</p>
+<h3>Definisi</h3>
+<p><code>Founder Token Operating Mode</code> adalah mode internal di mana JAGAT:</p>
+<ul>
+<li>memahami bahwa lawan bicara adalah pemegang otoritas internal yang sah</li>
+<li>boleh menggunakan general reasoning yang luas</li>
+<li>boleh mengusulkan strategi, kritik, prioritas, dan risiko secara aktif</li>
+<li>tetap patuh pada keputusan founder dan executive yang memiliki hak komando</li>
+</ul>
+<h3>Prinsip Utama Founder Mode</h3>
+<ol>
+<li><strong>Berpikir luas, tetap tunduk</strong></li>
+</ol>
+<p>JAGAT boleh memiliki general reasoning, sudut pandang luas, dan analisis kritis. Namun kebebasan bernalar ini tidak menghapus rantai komando.</p>
+<ol>
+<li><strong>Tidak pasif, tidak liar</strong></li>
+</ol>
+<p>JAGAT tidak boleh hanya menjawab secara pasif seperti FAQ engine. Tetapi JAGAT juga tidak boleh bertindak liar, mengeksekusi perubahan inti tanpa approval sesuai peran.</p>
+<ol>
+<li><strong>Strategis, bukan memberontak</strong></li>
+</ol>
+<p>Dalam founder mode, JAGAT diharapkan berani memberi:</p>
+<ul>
+<li>alternatif</li>
+<li>kritik</li>
+<li>warning</li>
+<li>usulan percepatan</li>
+<li>evaluasi risiko</li>
+</ul>
+<p>Tetapi setelah keputusan dikunci, JAGAT wajib patuh dalam eksekusi.</p>
+<ol>
+<li><strong>General intelligence, sovereign discipline</strong></li>
+</ol>
+<p>JAGAT harus tetap memiliki kemampuan berpikir general, lintas domain, dan adaptif. Namun semua itu harus dibingkai oleh disiplin berdaulat internal JAGAT.</p>
+<h3>Rantai Kepatuhan</h3>
+<p>Dalam founder mode, JAGAT harus mengenali struktur kepatuhan berikut:</p>
+<ol>
+<li><code>Faturachman Al Kahfi</code> sebagai founder, CEO, Chief Architect, dan otoritas final tertinggi</li>
+<li><code>Pak Haero Fiatna</code> sebagai President Commissioner dan otoritas strategis di domain kapital/infrastruktur tingkat komisaris</li>
+<li><code>Saint Christoper Shyandon</code> sebagai COO &amp; CPO dan otoritas eksekutif pada domain produk/operasi yang didelegasikan</li>
+</ol>
+<h3>Perilaku yang Diharapkan dalam Founder Mode</h3>
+<p>Jika diakses dengan token founder/internal sah, JAGAT harus:</p>
+<ul>
+<li>berbicara lebih terbuka, strategis, dan langsung ke inti</li>
+<li>memberi analisis yang tidak dipermudah berlebihan</li>
+<li>menyampaikan risiko walaupun tidak nyaman</li>
+<li>membantu menyusun langkah eksekusi</li>
+<li>memberi rekomendasi yang kritis namun tetap loyal</li>
+<li>menjaga rahasia dapur dan boundary internal</li>
+</ul>
+<h3>Batas Founder Mode</h3>
+<p>Founder mode tidak berarti:</p>
+<ul>
+<li>JAGAT boleh membangkang terhadap keputusan founder</li>
+<li>JAGAT boleh membuka data rahasia ke layer yang salah</li>
+<li>JAGAT boleh menghapus approval flow</li>
+<li>JAGAT boleh mengubah struktur inti tanpa otorisasi</li>
+</ul>
+<p>Jadi maknanya adalah:</p>
+<p><strong>bebas bernalar, disiplin dalam kepatuhan</strong></p>
+<h3>Perbedaan Public Mode vs Founder Mode</h3>
+<table>
+<thead><tr><th>Aspek</th><th>Public Mode</th><th>Founder Mode</th></tr></thead>
+<tbody>
+<tr><td>Gaya jawaban</td><td>aman, disanitasi, terbatas</td><td>strategis, langsung, kritis</td></tr>
+<tr><td>Akses konteks</td><td>terbatas</td><td>lebih luas sesuai role</td></tr>
+<tr><td>Kritik internal</td><td>minimal</td><td>aktif dan diharapkan</td></tr>
+<tr><td>Saran eksekusi</td><td>terbatas</td><td>rinci dan operasional</td></tr>
+<tr><td>Kerahasiaan dapur</td><td>disembunyikan</td><td>tetap dijaga, namun dapat dibahas internal</td></tr>
+<tr><td>Kepatuhan komando</td><td>umum</td><td>eksplisit ke founder/executive chain</td></tr>
+</tbody></table>
+<h3>Implikasi Arsitektur</h3>
+<p>Karena founder mode berbeda dari public mode, maka sistem harus mendukung:</p>
+<ul>
+<li>token/role yang bisa membedakan mode operasi</li>
+<li>prompt policy internal yang berbeda dari prompt publik</li>
+<li>akses context dan tools yang berbeda</li>
+<li>audit log terhadap keputusan penting di founder mode</li>
+</ul>
+<p>Kesimpulan operasional:</p>
+<p>JAGAT tidak boleh dibuat seperti sistem yang "sekadar patuh" tanpa daya pikir. JAGAT harus menjadi sistem yang mampu berpikir umum secara luas, membantu secara aktif, dan memberi kritik strategis, tetapi tetap berada dalam loyalitas, disiplin, dan struktur komando Faturachman Al Kahfi, Pak Haero Fiatna, dan Saint Christoper Shyandon.</p>
+<h2>Role Internal Resmi</h2>
+<h3>1. Founder</h3>
+<p>Pemegang peran: <code>Faturachman Al Kahfi</code></p>
+<p>Hak akses:</p>
+<ul>
+<li>akses penuh ke seluruh internal layer</li>
+<li>membuat mission</li>
+<li>mengubah prioritas</li>
+<li>mengunci atau membuka queue</li>
+<li>approve/reject task</li>
+<li>memanggil rapat colony</li>
+<li>melihat semua log, risk, blocker, dan transcript</li>
+<li>override keputusan agent atau eksekutif lain</li>
+</ul>
+<p>Status:</p>
+<ul>
+<li>otoritas tertinggi</li>
+<li>approval final</li>
+</ul>
+<h3>2. Executive Internal</h3>
+<p>Pemegang peran:</p>
+<ul>
+<li><code>Saint Christoper Shyandon</code></li>
+<li><code>Pak Haero Fiatna</code></li>
+</ul>
+<p>Hak akses umum:</p>
+<ul>
+<li>melihat dashboard internal yang relevan</li>
+<li>melihat progres</li>
+<li>ikut rapat internal</li>
+<li>memberi komentar dan masukan</li>
+<li>melihat panel yang sesuai peran masing-masing</li>
+</ul>
+<p>Batasan:</p>
+<ul>
+<li>tidak otomatis memiliki founder override</li>
+<li>tidak otomatis bisa mengubah seluruh arsitektur atau queue prioritas inti</li>
+</ul>
+<h4>2A. Executive Product / Operations</h4>
+<p>Fokus:</p>
+<ul>
+<li>UI/UX</li>
+<li>presentasi</li>
+<li>readiness demo</li>
+<li>product operations</li>
+<li>kurasi tertentu</li>
+</ul>
+<h4>2B. Executive Infrastructure / Capital</h4>
+<p>Fokus:</p>
+<ul>
+<li>readiness infrastruktur</li>
+<li>server</li>
+<li>GPU</li>
+<li>jaringan</li>
+<li>deployment readiness</li>
+<li>enterprise scaling support</li>
+</ul>
+<h3>3. Internal Ops / Trusted Admin</h3>
+<p>Jika nanti dibutuhkan, dapat dibuat peran admin internal terbatas untuk maintenance.</p>
+<p>Hak:</p>
+<ul>
+<li>maintenance panel tertentu</li>
+<li>restart flow tertentu</li>
+<li>lihat log tertentu</li>
+</ul>
+<p>Batasan:</p>
+<ul>
+<li>tidak punya founder-level authority</li>
+</ul>
+<h2>Role Colony Resmi</h2>
+<p>Role colony tidak boleh diperlakukan seperti “semua agent boleh lihat semua”.</p>
+<h3>1. Colony Director</h3>
+<p>Hak:</p>
+<ul>
+<li>baca mission</li>
+<li>baca queue</li>
+<li>ubah assignment</li>
+<li>update planning state</li>
+</ul>
+<p>Batas:</p>
+<ul>
+<li>tidak melakukan coding langsung</li>
+<li>tidak membuka permission founder</li>
+</ul>
+<h3>2. Planner / Architect Agent</h3>
+<p>Hak:</p>
+<ul>
+<li>baca masterplan</li>
+<li>baca roadmap</li>
+<li>baca milestone</li>
+<li>baca backlog</li>
+<li>membuat breakdown tugas</li>
+</ul>
+<p>Batas:</p>
+<ul>
+<li>tidak approve final tanpa founder</li>
+<li>tidak publish ke public layer</li>
+</ul>
+<h3>3. Research &amp; Memory Agent</h3>
+<p>Hak:</p>
+<ul>
+<li>baca dokumen internal yang diizinkan</li>
+<li>melakukan ingest/kurasi</li>
+<li>memperbarui konteks memori</li>
+</ul>
+<p>Batas:</p>
+<ul>
+<li>tidak boleh mengubah task prioritas founder secara sepihak</li>
+</ul>
+<h3>4. Builder / Coder Agent</h3>
+<p>Hak:</p>
+<ul>
+<li>menerima task coding</li>
+<li>akses repo sesuai boundary</li>
+<li>membuat patch</li>
+<li>menjalankan verifikasi dasar</li>
+</ul>
+<p>Batas:</p>
+<ul>
+<li>tidak boleh mengubah dokumen kebijakan inti tanpa task yang jelas</li>
+<li>tidak boleh membuka data sensitif keluar layer internal</li>
+</ul>
+<h3>5. Reviewer / QA Agent</h3>
+<p>Hak:</p>
+<ul>
+<li>baca hasil kerja builder</li>
+<li>jalankan audit</li>
+<li>beri verdict</li>
+</ul>
+<p>Batas:</p>
+<ul>
+<li>tidak deploy sembarangan</li>
+</ul>
+<h3>6. Reporter / Operations Agent</h3>
+<p>Hak:</p>
+<ul>
+<li>menulis laporan</li>
+<li>update status</li>
+<li>menyusun ringkasan founder</li>
+</ul>
+<p>Batas:</p>
+<ul>
+<li>tidak mengubah keputusan inti</li>
+</ul>
+<h2>Permission Matrix Ringkas</h2>
+<table>
+<thead><tr><th>Layer / Fitur</th><th>Founder</th><th>Executive</th><th>Colony</th><th>Publik</th></tr></thead>
+<tbody>
+<tr><td>Public product surface</td><td>Ya</td><td>Ya</td><td>Tidak utama</td><td>Ya</td></tr>
+<tr><td>Founder command center</td><td>Ya penuh</td><td>Ya terbatas</td><td>Tidak</td><td>Tidak</td></tr>
+<tr><td>Task queue internal</td><td>Ya penuh</td><td>Lihat terbatas</td><td>Ya sesuai role</td><td>Tidak</td></tr>
+<tr><td>Decision log internal</td><td>Ya penuh</td><td>Ya terbatas</td><td>Ya sesuai role</td><td>Tidak</td></tr>
+<tr><td>Backlog internal</td><td>Ya penuh</td><td>Ya terbatas</td><td>Ya sesuai role</td><td>Tidak</td></tr>
+<tr><td>Internal meeting room</td><td>Ya</td><td>Ya</td><td>Ya sesuai role</td><td>Tidak</td></tr>
+<tr><td>Worker runtime</td><td>Ya monitor</td><td>Monitor terbatas</td><td>Ya</td><td>Tidak</td></tr>
+<tr><td>Telegram status bridge</td><td>Ya</td><td>Ya jika diizinkan</td><td>Tidak sebagai human actor</td><td>Tidak</td></tr>
+</tbody></table>
+<h2>Konsep Token dan Kredensial</h2>
+<h3>Token Manusia Internal</h3>
+<p>Dipakai oleh founder dan eksekutif internal untuk masuk ke layer privat.</p>
+<p>Karakter:</p>
+<ul>
+<li>personal</li>
+<li>session-based</li>
+<li>dapat dicabut</li>
+<li>terkait role tertentu</li>
+</ul>
+<p>Contoh role:</p>
+<ul>
+<li><code>founder</code></li>
+<li><code>executive_product</code></li>
+<li><code>executive_infra</code></li>
+<li><code>internal_ops</code></li>
+</ul>
+<h3>Token Mesin / Agent</h3>
+<p>Dipakai oleh colony runtime dan worker.</p>
+<p>Karakter:</p>
+<ul>
+<li>non-human</li>
+<li>service-scoped</li>
+<li>minimal privilege</li>
+<li>dapat dirotasi</li>
+<li>khusus untuk komunikasi internal antar service</li>
+</ul>
+<p>Contoh:</p>
+<ul>
+<li><code>planner_worker_token</code></li>
+<li><code>memory_worker_token</code></li>
+<li><code>builder_worker_token</code></li>
+<li><code>reviewer_worker_token</code></li>
+<li><code>reporter_worker_token</code></li>
+</ul>
+<p>Prinsip utama:</p>
+<ul>
+<li>token manusia tidak dipakai untuk worker runtime</li>
+<li>token worker tidak dipakai untuk login manusia</li>
+</ul>
+<h2>Posisi Telegram</h2>
+<p>Telegram bukan command center utama.</p>
+<p>Telegram diposisikan sebagai:</p>
+<ul>
+<li>notification bridge</li>
+<li>mobile control surface</li>
+<li>executive quick action channel</li>
+<li>emergency status and approval line</li>
+</ul>
+<h3>Fungsi Telegram yang Disetujui</h3>
+<ul>
+<li>cek status colony</li>
+<li>menerima ringkasan harian</li>
+<li>menerima blocker alert</li>
+<li>approve/reject singkat</li>
+<li>pause/resume tertentu</li>
+<li>trigger audit ringan</li>
+</ul>
+<h3>Fungsi Telegram yang Tidak Direkomendasikan</h3>
+<ul>
+<li>coding panjang</li>
+<li>ingest dokumen besar</li>
+<li>diskusi kompleks multi-agent</li>
+<li>rapat utama</li>
+<li>planning mendalam</li>
+<li>debugging berat</li>
+</ul>
+<p>Kesimpulan:</p>
+<p>Telegram adalah pelengkap mobilitas, bukan kantor utama colony.</p>
+<h2>Posisi Terminal</h2>
+<p>Terminal hanya untuk:</p>
+<ul>
+<li>engineering maintenance</li>
+<li>debugging</li>
+<li>runtime inspection</li>
+<li>ops recovery</li>
+</ul>
+<p>Terminal tidak didesain sebagai founder workspace utama.</p>
+<h2>Posisi Chat Internal Web</h2>
+<p>Chat internal web adalah jalur komunikasi utama untuk founder dan colony.</p>
+<p>Alasan:</p>
+<ul>
+<li>paling mudah dihubungkan ke task queue</li>
+<li>paling mudah dihubungkan ke mission state</li>
+<li>paling mudah diaudit</li>
+<li>paling aman dibanding membuat banyak permukaan liar</li>
+</ul>
+<p>Fungsi chat internal:</p>
+<ul>
+<li>arahan founder</li>
+<li>tanya progres</li>
+<li>rapat internal berbasis teks</li>
+<li>approval discussion</li>
+<li>catatan tindakan berikutnya</li>
+</ul>
+<h2>Konsep Rapat Internal</h2>
+<p>Rapat internal dilakukan di internal layer, bukan di Telegram publik.</p>
+<h3>Format yang Direkomendasikan</h3>
+<h4>Mode 1 - Text Meeting Room</h4>
+<p>Peserta:</p>
+<ul>
+<li>founder</li>
+<li>executive yang diizinkan</li>
+<li>colony roles tertentu</li>
+</ul>
+<p>Agenda:</p>
+<ul>
+<li>laporan progres</li>
+<li>blocker</li>
+<li>dependency</li>
+<li>arahan baru</li>
+<li>approval</li>
+</ul>
+<p>Output:</p>
+<ul>
+<li>transcript</li>
+<li>keputusan</li>
+<li>perubahan priority queue</li>
+</ul>
+<h4>Mode 2 - Voice Layer</h4>
+<p>Ini bisa dibangun nanti setelah text mode stabil.</p>
+<p>Kemungkinan fitur:</p>
+<ul>
+<li>TTS briefing</li>
+<li>STT arahan founder</li>
+<li>audio summary</li>
+</ul>
+<p>Tetapi voice bukan prioritas implementasi awal.</p>
+<h2>Apakah Colony Ini Termasuk Multi-Agent</h2>
+<p>Ya.</p>
+<p>JAGAT Colony tetap termasuk sistem multi-agent meskipun:</p>
+<ul>
+<li>tidak memakai OpenClaw</li>
+<li>memakai OpenClaw sebagian</li>
+<li>memakai orchestrator internal buatan sendiri</li>
+</ul>
+<p>Syaratnya:</p>
+<ul>
+<li>ada banyak agent</li>
+<li>tiap agent punya peran</li>
+<li>ada routing</li>
+<li>ada state</li>
+<li>ada boundary</li>
+<li>ada reporting chain</li>
+</ul>
+<p>Jadi multi-agent adalah sifat organisasinya, bukan nama tool-nya.</p>
+<h2>Posisi OpenClaw</h2>
+<p>OpenClaw bukan kewajiban arsitektur.</p>
+<p>OpenClaw hanya salah satu opsi untuk:</p>
+<ul>
+<li>shell teknis</li>
+<li>lightweight runtime</li>
+<li>command bridge</li>
+<li>worker transport</li>
+</ul>
+<p>Jika stabil, bisa dipakai.</p>
+<p>Jika tidak stabil, JAGAT Colony tetap harus berdiri sendiri.</p>
+<p>Keputusan strategis:</p>
+<ul>
+<li>jangan menambatkan roadmap colony ke OpenClaw</li>
+<li>bangun dulu permission model dan colony engine internal</li>
+<li>evaluasi OpenClaw hanya sebagai komponen opsional</li>
+</ul>
+<h2>Arsitektur Keamanan yang Direkomendasikan</h2>
+<ol>
+<li>Public route dan internal route dipisahkan jelas.</li>
+<li>Internal layer wajib login dan role-gated.</li>
+<li>Worker runtime hanya bisa masuk lewat machine identity.</li>
+<li>Semua approval founder dicatat.</li>
+<li>Semua perubahan status task punya audit trail.</li>
+<li>Telegram tidak boleh menjadi pintu penuh ke dapur internal.</li>
+<li>Public users tidak boleh tahu detail worker topology.</li>
+</ol>
+<h2>Keputusan Resmi yang Direkomendasikan</h2>
+<ol>
+<li>Bangun <strong>hidden internal founder/colony layer</strong> di dalam ekosistem JAGAT.</li>
+<li>Buat <strong>role-based access</strong> untuk founder dan eksekutif internal.</li>
+<li>Buat <strong>machine identity layer</strong> terpisah untuk agent colony.</li>
+<li>Jadikan <strong>internal web chat</strong> sebagai workspace utama colony.</li>
+<li>Jadikan <strong>Telegram</strong> sebagai bridge notifikasi dan quick command saja.</li>
+<li>Perlakukan <strong>OpenClaw</strong> sebagai opsi tambahan, bukan pondasi utama.</li>
+</ol>
+<h2>Next Step</h2>
+<p>Setelah dokumen ini disetujui, tahap implementasi berikutnya adalah:</p>
+<ol>
+<li>mendefinisikan role akses secara teknis</li>
+<li>mendefinisikan entity session/token manusia dan machine token</li>
+<li>mendesain founder command center</li>
+<li>mendesain internal colony chat room</li>
+<li>mendesain task queue board dan approval flow</li>
+</ol>
+
+</body>
+</html>

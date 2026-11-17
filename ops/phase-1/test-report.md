@@ -1,0 +1,18 @@
+# JAGAT Phase 1 — Verification & Test Report
+
+## Ringkasan Pengujian Acceptance Criteria (10/10 Lulus)
+
+Seluruh kriteria penerimaan (*Acceptance Criteria* Bagian 14 Blueprint Phase 1) diuji secara otomatis menggunakan `node:test` (`npx --yes tsx --test src/phase1/phase1.test.ts`) serta dapat dijalankan secara interaktif melalui konsol JAGAT Phase 1.
+
+| No | Area Acceptance Criteria | Skenario Uji | Hasil yang Diharapkan | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| **1** | **Idempotency & Crash Recovery** | Mengirim email ke prospek, lalu menyimulasikan restart/retry dengan `lead_id` & `campaign_id` yang sama; serta menyimulasikan crash pasca-SMTP sebelum konfirmasi status. | Pengiriman kedua diblokir (`DUPLICATE`); crash pasca-SMTP ditandai `NEEDS_RECONCILIATION` dan tidak mengirim ulang sampai direkonsiliasi. | **PASS** |
+| **2** | **Scheduler & Redis Lock** | Dua worker mencoba mengklaim campaign/task yang sama secara bersamaan; pelepasan lock dengan token salah vs token pemilik; pemulihan *stale lock* yang kedaluwarsa. | Hanya 1 worker yang berhasil mengklaim lock; pelepasan oleh bukan pemilik ditolak (*compare-and-delete*); *stale lock* berhasil dipulihkan. | **PASS** |
+| **3** | **Policy & Suppression** | Mencoba mengirim email ke prospek berstatus `SUPPRESSED` atau `UNSUBSCRIBED`, atau saat `globalPause = true`. | Policy Engine menolak pengiriman dan mencatat event blokir tanpa memanggil SMTP. | **PASS** |
+| **4** | **Approval Re-validation** | Prospek berada di `PENDING_APPROVAL`, lalu dimasukkan ke daftar suppression atau Global Pause diaktifkan tepat sebelum tombol `Approve` ditekan. | Aksi `Approve` memvalidasi ulang policy dan state; pengiriman dibatalkan jika policy berubah menjadi tidak memenuhi syarat. | **PASS** |
+| **5** | **Inbound Matching & Escalation** | Balasan masuk dari prospek dikenal dengan intent `POSITIVE` (confidence 0.92), `NEGATIVE` (unsubscribe), balasan ambigu (confidence 0.55), dan serangan *prompt injection*. | `POSITIVE` ($\ge 0.80$) menghasilkan balasan Calendly & status `POSITIVE`; `NEGATIVE` mengubah status ke `UNSUBSCRIBED`; ambigu & prompt injection masuk `NEEDS_HUMAN_REVIEW`. | **PASS** |
+| **6** | **Model Routing & Fallback** | Menjalankan task `classification`, `extraction_json`, `email_generation`, `complex_reasoning`, `coding`, dan `embedding`, termasuk simulasi timeout provider utama. | Router memilih model sesuai tabel kebijakan; saat provider utama timeout, otomatis beralih ke fallback model dan mencatat `fallback_used = true`. | **PASS** |
+| **7** | **Cost Tracking & Budget Cap** | Mencatat token input/output, latency (ms), provider, model, dan estimasi biaya IDR; menyimulasikan total biaya melampaui batas hard cap. | Setiap eksekusi tercatat di `model_usage`; saat melewati hard cap, *kill switch* aktif dan memblokir panggilan cloud berbayar baru. | **PASS** |
+| **8** | **RAG & Qdrant Validation** | Memeriksa kesehatan service Qdrant, ketersediaan koleksi `jagat_indonesia_knowledge`, kesesuaian dimensi 768 (`nomic-embed-text`), dan simulasi Qdrant offline. | Saat sehat, validasi dimensi 768 & retrieval lulus; saat Qdrant offline, workflow non-RAG tetap berjalan melalui *graceful degradation*. | **PASS** |
+| **9** | **Recovery & Dead-Letter** | Menyimulasikan error transien (timeout jaringan) vs error permanen (auth/invalid address) pada task agent. | Error transien masuk antrean *retry with backoff*; error permanen tidak di-retry berulang kali dan masuk ke *dead-letter / human review*. | **PASS** |
+| **10** | **Feature Flag Rollback** | Mematikan feature flag Phase 1 (`FF_OUTREACH_POLICY_ENGINE`, `FF_IDEMPOTENCY_GUARD`, dll.). | Fitur baru nonaktif secara bersih tanpa merusak struktur data maupun alur dasar yang sudah ada. | **PASS** |

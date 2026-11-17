@@ -1,0 +1,20 @@
+{
+  "id": "JAGAT-W3-003",
+  "status": "curated",
+  "title": "JAGAT Garuda Ladder — Model Classification System",
+  "source": "jagat-garuda-ladder",
+  "category": "infrastructure",
+  "doc_type": "md",
+  "owner": "Faturachman Al Kahfi",
+  "created_at": "2026-06-06",
+  "trust_level": "founder_verified",
+  "provenance": "ops folder — internal model classification replacing external naming (Haiku/Sonnet/Opus)",
+  "notes": "5-level classification: L1 Bara (draft), L2 Cakra (coding), L3 Wisesa (reviewer), L4 Garuda (architect), L5 Garuda Inti (sovereign core). Includes benchmark criteria per level.",
+  "local_path": "C:\\JAGAT\\ops\\GARUDA_LADDER.md",
+  "sha256": "17741B6E57140F8520A2999065FD19357FD4B5867F20EB18E7FCFEBEE0028441",
+  "size_bytes": 3108,
+  "extraction": {
+    "status": "normalized",
+    "doc_type": "md"
+  }
+}

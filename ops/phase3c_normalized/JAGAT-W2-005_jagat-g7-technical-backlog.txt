@@ -1,0 +1,53 @@
+---
+id: JAGAT-W2-005
+title: JAGAT G7 Technical Backlog
+source: jagat-g7-technical-backlog
+category: infrastructure
+doc_type: md
+owner: Faturachman Al Kahfi
+created_at: 2026-05-20
+trust_level: core_team_verified
+provenance: ops folder — cross-phase technical task backlog with audit records
+sha256: 973E3C647086DA753BD5DF5A1230628F2E7E5AD1BCC66BCB07A47A1F039FD7E2
+notes: Technical tasks T-001 to T-012 spanning Phase 2A through Phase 4A.
+---
+
+# JAGAT G7 Technical Backlog
+
+| ID | Phase | Task | Owner | Risiko | Acceptance Criteria | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| T-001 | 2A | Identity lock service-layer + fast-path. | AI Builder | Identity drift. | Identity benchmark PASS. | Done |
+| T-002 | 2B | Cognitive protocol layer. | AI Builder | Prompt echo dan output generik. | Build PASS, creator test PASS. | Done |
+| T-003 | 2C | Cognitive benchmark suite. | AI Builder | Regression tidak terdeteksi. | `benchmark:cognitive` PASS 7/7. | Done |
+| T-004 | 2D | Founder operating system docs. | AI Builder | Founder tidak punya dashboard kerja. | Ops folder lengkap dan masterplan update. | Done |
+| T-005 | 3A | Formal ingestion schema. | AI Builder + Saint | Metadata/provenance lemah. | Ingest menerima dan mewajibkan title, source, category, doc_type, owner, created_at, trust_level, provenance; notes opsional. | Done |
+| T-006 | 3A | Reject prompt/debug documents by marker. | AI Builder | Qdrant pollution. | Ingest menolak prompt leak markers, feedback-loop, debug transcript, dan output model dengan HTTP 400. | Done |
+| T-006A | 3B | Strategic document manifest Wave 1. | AI Builder + Faturachman | Dokumen inti tidak jelas prioritas/provenance. | Manifest Wave 1 berisi Blueprint, Roadmap, Milestone dengan metadata, SHA256, path, status curated. | Done |
+| T-007 | 3C | Digitalization and normalization pipeline. | AI Builder | PDF/XLSX rusak atau noise masuk ke memori. | PDF/XLSX/MD/TXT bisa diekstrak menjadi normalized text dengan extraction report. | Done |
+| T-008 | 3D | Semantic chunking policy. | AI Builder | Chunk terlalu panjang atau noise. | Chunk max token, overlap, section boundary, chunk_id, chunk_index, dan metadata induk. | Done |
+| T-009 | 3E | Bulk ingest script for PDFs/XLSX/MD/TXT. | AI Builder | Manual ingest lambat dan duplikasi liar. | CLI ingest folder berbasis manifest, dry run, duplicate detection dasar, dan ingest report. | Done |
+| T-010 | 3F | Hybrid search dense + sparse. | AI Builder | Retrieval lemah untuk istilah spesifik. | Query memakai dense retrieval plus keyword/category/source filter atau rerank sederhana. | Done |
+| T-011 | 3G | Citation/provenance rendering in UI. | Saint + AI Builder | Jawaban tidak bisa diaudit. | UI menampilkan title, source, category, score, dan chunk index untuk contextDocsUsed > 0. | Done |
+| T-012 | 4A | Agent boundary design: Kiting AI, Ting AI, Motherbox. | AI Builder | Agent bercampur domain. | Setiap agent punya persona, memory scope, tools, refusal. | Planned |
+| T-013 | 3B-W2 | Wave 2 manifest: 10 operational documents. | AI Builder | Dokumen operasional belum masuk memori. | Manifest Wave 2 berisi Masterplan, Team, Decision Log, Risk, Tech Backlog, Product Backlog, Weekly Loop, 30/60/90, Phase 3 Plan, Phase 3B Manifest. | Done |
+| T-014 | 3C-W2 | Wave 2 normalization pipeline. | AI Builder | Markdown normalization gagal. | 10 dokumen normalized text di ops/phase3c_normalized. | Done |
+| T-015 | 3D-W2 | Wave 2 semantic chunking. | AI Builder | Chunk noise dari tabel backlog. | 128 chunk dari 10 dokumen, min/max/avg chars sesuai policy. | Done |
+| T-016 | 3E-W2 | Wave 2 bulk embedding + ingest. | AI Builder | Ollama embedding gagal. | 128 chunk di-embed dan upsert ke Qdrant; 0 failure. | Done |
+
+## Next Technical Priority
+
+Prioritas teknis berikutnya setelah Phase 3 Wave 2: **Phase 3 Wave 3 - ekspansi korpus ke 20 dokumen** (perlu dokumen regulasi, finance, dan founder notes tambahan dari Faturachman).
+
+## Audit Terakhir
+
+Tanggal: 2026-05-24
+
+- `benchmark:identity` PASS 9/9.
+- `test:creator` PASS 6/6.
+- `benchmark:cognitive` PASS 10/10 (post Wave 1).
+- Phase 3 Wave 1 selesai: 3 dokumen inti (Blueprint, Roadmap, Milestone) → 55 Qdrant points.
+- Phase 3 Wave 2 selesai: 10 dokumen operasional → 128 Qdrant points.
+- Total memori berdaulat: 13 dokumen, 183 Qdrant points, 8 kategori aktif.
+- `phase3f:smoke` PASS setelah Wave 2 (hybrid retrieval + filter).
+- Execution Masterplan disinkronkan: Phase 2 → selesai, Phase 3 → Wave 1 + Wave 2 done.
+- EXECUTION_MAP_30_60_90 di-update dengan status aktual per deliverable.

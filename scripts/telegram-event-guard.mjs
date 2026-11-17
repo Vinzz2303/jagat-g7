@@ -58,6 +58,9 @@ export async function isEventAlreadySent(eventKey, ledgerPath = DEFAULT_TELEGRAM
  * Atomically records the sent notification to prevent future duplicate broadcasts
  */
 export async function recordTelegramEvent(params, ledgerPath = DEFAULT_TELEGRAM_LEDGER) {
+  if (!['ATTEMPTED', 'DELIVERED', 'FAILED', 'UNKNOWN'].includes(params.status || 'DELIVERED')) {
+    throw new Error('Invalid Telegram event status.');
+  }
   const eventId = `notif_${Date.now()}_${crypto.randomBytes(4).toString('hex')}`;
   const now = new Date().toISOString();
 
@@ -70,7 +73,7 @@ export async function recordTelegramEvent(params, ledgerPath = DEFAULT_TELEGRAM_
     event_type: params.event_type,
     summary: params.summary || '',
     sent_at: now,
-    status: 'DELIVERED',
+    status: params.status || 'DELIVERED',
   };
 
   const dir = path.dirname(ledgerPath);
@@ -80,4 +83,17 @@ export async function recordTelegramEvent(params, ledgerPath = DEFAULT_TELEGRAM_
   await fs.appendFile(ledgerPath, line, 'utf8');
 
   return record;
+}
+
+/** Latest durable state; malformed/unreadable history must not allow a resend. */
+export async function getTelegramEventStatus(eventKey, ledgerPath = DEFAULT_TELEGRAM_LEDGER) {
+  let raw;
+  try { raw = await fs.readFile(ledgerPath, 'utf8'); }
+  catch (error) { if (error.code === 'ENOENT') return null; throw error; }
+  let status = null;
+  for (const line of raw.replace(/^\uFEFF/, '').split(/\r?\n/).filter(Boolean)) {
+    const event = JSON.parse(line);
+    if (event.event_key === eventKey) status = event.status;
+  }
+  return status;
 }

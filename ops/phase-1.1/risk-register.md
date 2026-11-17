@@ -1,0 +1,18 @@
+# JAGAT G7 — Phase 1.1 Risk Register & Mitigation Strategy (Revised)
+**Document Version:** 1.1.0 (Architecture Review Revision)  
+**Status:** DRAFT PROPOSAL — AWAITING FOUNDER APPROVAL  
+
+---
+
+## 1. Matriks Risiko Operasional & Keamanan Phase 1.1
+
+| ID | Kategori Risiko | Deskripsi Risiko | Severity | Likelihood | Strategi Mitigasi Terverifikasi | Status |
+|:---:|:---|:---|:---:|:---:|:---|:---:|
+| **R-101** | **Notification Loop / Telegram Spam** | Scheduled Task Windows `\JAGAT Autonomous Revenue Agent V1` menjalankan skrip broadcast statis setiap 3 jam (`PT3H`) tanpa tracking status. | **CRITICAL** | **HIGH (ACTIVE)** | **Mitigasi 3 Lapis:**<br>1. Buat `telegram-events.jsonl` untuk mendata ID notifikasi yang sudah terkirim.<br>2. Ganti broadcast statis dengan event-driven notification (hanya memicu saat ada lead baru `PENDING_APPROVAL`).<br>3. Nonaktifkan loop scheduler lama **hanya setelah** gatekeeper baru terverifikasi lulus uji. | Proposed Work Package A |
+| **R-102** | **Accidental External Email Blast** | Uji coba pengiriman menembakkan email draft ke alamat kontak bisnis publik yang ada di `PROSPECT_TRACKER.csv`. | **CRITICAL** | **LOW** | **Strict Whitelist Guard:** Transport live SMTP mengunci penerima hanya ke email founder (`faturachmanalkahfi7@gmail.com`). Semua email lain dialihkan ke staging mock `<jagat-staging-...>`. | Active Guard |
+| **R-103** | **JSONL Ledger Corruption (Concurrent Writes)** | Beberapa worker menulis ke `outreach-send-ledger.jsonl` pada detik yang sama tanpa koordinasi, menyebabkan baris JSON terpotong. | **HIGH** | **MEDIUM** | Terapkan **Coordinated Serialized Writer**: In-process mutex queue, unique `event_id`, validasi single-line format, dan automated checkpoint backup. | Proposed Work Package B |
+| **R-104** | **Approval & Delivery State Conflation** | Menganggap pengiriman sukses otomatis berarti disetujui manusia, atau sebaliknya. | **HIGH** | **LOW** | **Pemisahan Model State:** `approval_status` (`PENDING`/`APPROVED`/`REJECTED`) terpisah penuh dari `delivery_status` (`NOT_SENT`/`RESERVED`/`SENT`/`FAILED`/`NEEDS_RECONCILIATION`). | Proposed Architecture |
+| **R-105** | **Over-Suppression on Ambiguous Replies** | Prospek yang hanya menunda waktu (bukan menolak) otomatis diblacklist selamanya. | **MEDIUM** | **HIGH** | **5-Way Classification Policy:** Pisahkan `UNSUBSCRIBE_OPT_OUT` (blacklist permanen) dari `NOT_NOW_OBJECTION` (hold & re-contact) dan `NEGATIVE_GENERAL`. | Proposed Work Package E |
+| **R-106** | **Prompt Injection Beyond Regex** | Penyerang menggunakan teknik pengaburan instruksi (obfuscation, rot13, multi-language jailbreak) untuk menembus filter regex. | **CRITICAL** | **MEDIUM** | **Defense-in-Depth:** (1) Regex heuristic scanner, (2) Isolasi tag `<untrusted_email_content>`, (3) Zero-tool permission boundary pada inbound parser, (4) Sensor rahasia server-side sebelum payload diteruskan ke LLM. | Active Architecture |
+| **R-107** | **Redis Service Outage** | Service Redis port 6379 mati, menyebabkan locking worker melempar fatal exception. | **MEDIUM** | **LOW** | **Graceful Degradation:** Lock manager beralih otomatis ke in-memory token map dengan status warning di dashboard (`provenance: UNAVAILABLE`). | Active Fallback |
+| **R-108** | **Core Service Regression** | Perubahan adapter di console merusak proses Express BFF port 5000 atau Next.js UI port 50012. | **HIGH** | **LOW** | **Strict Boundary Isolation:** Console tetap berjalan di port 5005. Hubungan ke Core hanya melalui pembacaan file terstandarisasi dan endpoint aman tanpa refactor monolitik. | Active Boundary |

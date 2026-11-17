@@ -1,0 +1,25 @@
+{
+  "id": "JAGAT-W1-003",
+  "status": "curated",
+  "title": "JAGAT G7 Project Milestones V5",
+  "source": "jagat-g7-project-milestones-v5",
+  "category": "milestone",
+  "doc_type": "xlsx",
+  "owner": "Faturachman Al Kahfi",
+  "created_at": "2026-05-20",
+  "trust_level": "founder_verified",
+  "provenance": "local file from founder workstation Downloads folder",
+  "notes": "Milestone tracking reference for delivery progress and project status.",
+  "local_path": "C:\\Users\\Administrator\\Downloads\\JAGAT_G7_Project_Milestones_V5.xlsx",
+  "sha256": "AC35564E96D5EFAAAB852BBF2D3F35660461544E8E3385F09F0EC87BB337E5FC",
+  "size_bytes": 11663,
+  "extraction": {
+    "sheet_count": 2,
+    "sheets": [
+      "Ringkasan & Dashboard",
+      "Matriks Milestone"
+    ],
+    "chars_per_page": null,
+    "status": "normalized"
+  }
+}

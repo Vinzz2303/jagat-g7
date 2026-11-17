@@ -1,0 +1,48 @@
+---
+id: JAGAT-W2-003
+title: JAGAT G7 Decision Log
+source: jagat-g7-decision-log
+category: decision
+doc_type: md
+owner: Faturachman Al Kahfi
+created_at: 2026-05-20
+trust_level: founder_verified
+provenance: ops folder — locked strategic and architectural decisions
+sha256: BBDFE099171892BF73343ACC5987D7519834CB9FFA445948A26F4A26A3EE2752
+notes: 15 locked decisions from D-001 to D-015 covering identity, memory, ingest, and UI policies.
+---
+
+# JAGAT G7 Decision Log
+
+Decision log adalah catatan keputusan yang sudah dikunci agar proyek tidak berputar ulang.
+
+| ID | Tanggal | Keputusan | Alasan | Dampak | Owner | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| D-001 | 2026-05-20 | JAGAT G7 bukan API wrapper dan bukan chatbot generik. | North Star proyek adalah Sovereign Super Intelligence Core. | Semua fitur harus memperkuat infrastruktur, memori, penalaran, atau eksekusi. | Faturachman | Locked |
+| D-002 | 2026-05-20 | Faturachman Al Kahfi adalah pencipta visi, CEO, Chief Architect, dan otoritas utama JAGAT G7. | Mencegah identity drift. | Semua identity response dan creator route mengarah ke Faturachman. | Faturachman | Locked |
+| D-003 | 2026-05-20 | Rahasia dapur arsitektur internal tidak boleh dibuka di jawaban publik. | Melindungi keunggulan teknis dan narasi strategis. | Public identity dibuat ringkas; detail internal hanya untuk audit teknis eksplisit. | AI Builder | Locked |
+| D-004 | 2026-05-20 | Auto-ingest output model ke Qdrant dimatikan. | Mencegah JAGAT memakan ulang jawaban/prompt sendiri. | Qdrant hanya menerima knowledge terkurasi. | AI Builder | Locked |
+| D-005 | 2026-05-20 | Ingest tetap menjadi mulut knowledge terkurasi. | JAGAT harus makin pintar dari dokumen/sumber yang sengaja dipilih. | Phase 3 fokus pada pipeline ingest formal dengan metadata. | Faturachman + Saint | Locked |
+| D-006 | 2026-05-20 | Setiap perubahan model/prompt wajib melewati benchmark. | Menjaga identitas, no-leak, RAG, dan format output. | `npm run benchmark:identity`, `test:creator`, dan `benchmark:cognitive` menjadi gate. | AI Builder | Locked |
+| D-007 | 2026-05-20 | Front page JAGAT tidak boleh terlihat seperti terminal simulator atau login vendor asing. | Produk harus terasa berdaulat, hidup, dan mudah dipahami seperti workspace kemampuan, bukan sekadar dashboard teknis. | Login page memakai sesi lokal, tanpa Google/proxy, dan panel demo animatif Riset/Ingest/Memori/Eksekusi. | Faturachman + Saint + AI Builder | Locked |
+| D-008 | 2026-05-20 | Phase 3 wajib dimulai dari schema metadata/provenance sebelum ingest massal. | Memori berdaulat harus bisa diaudit; dokumen tanpa asal-usul akan merusak retrieval dan citation. | Urutan Phase 3 dikunci menjadi 3A schema, 3B kurasi, 3C normalisasi, 3D chunking, 3E embedding massal, 3F hybrid search, 3G citation UI. | Faturachman + AI Builder | Locked |
+| D-009 | 2026-05-20 | Wave 1 memori strategis dimulai dari Technical Blueprint, Sovereign Roadmap, dan Project Milestones V5. | Tiga dokumen ini adalah sumber inti arah arsitektur, roadmap, dan milestone JAGAT G7. | Phase 3B mengunci manifest curated; Phase 3C hanya menormalisasi dokumen Wave 1 ini sebelum chunking/embedding. | Faturachman + AI Builder | Locked |
+| D-010 | 2026-05-20 | Phase 3C memakai pipeline lokal Node untuk PDF/XLSX dan OCR fallback untuk PDF image-only. | Roadmap PDF tidak memiliki embedded text, sehingga OCR diperlukan agar memori Wave 1 tidak pincang. | Normalized artifact dan extraction report dibuat lokal; tidak ada ingest Qdrant pada Phase 3C. | AI Builder | Locked |
+| D-011 | 2026-05-21 | Phase 3D memakai semantic chunking audit-ready sebelum embedding massal. | Chunk harus membawa metadata/provenance dan bisa diperiksa sebelum masuk Qdrant. | Wave 1 menghasilkan 55 chunk JSON/JSONL; Qdrant ingest tetap ditahan sampai Phase 3E. | AI Builder | Locked |
+| D-012 | 2026-05-21 | Phase 3E memakai deterministic point ID untuk bulk embedding Qdrant. | Rerun ingest harus idempotent dan tidak menggandakan memori. | Wave 1 masuk Qdrant sebagai 55 point dengan metadata/provenance lengkap; dry-run setelah ingest menunjukkan semua point sudah existing. | AI Builder | Locked |
+| D-013 | 2026-05-24 | Phase 3F memakai hybrid dense+sparse retrieval dengan filter metadata. | Dense vector saja lemah untuk istilah teknis spesifik; keyword signal dan filter audit dibutuhkan sebelum citation UI. | Backend mengirim `contextSources` yang memuat score, denseScore, sparseScore, source, category, chunk index, dan retrieval mode untuk Phase 3G. | AI Builder | Locked |
+| D-014 | 2026-05-24 | Phase 3G menampilkan citation UI hanya dari `contextSources`. | Citation palsu akan merusak audit memori; sumber hanya boleh muncul jika backend benar-benar memakai konteks. | Bubble jawaban menampilkan citation ringkas; jawaban deduksi tanpa konteks tidak menampilkan sumber palsu. | AI Builder + Saint | Locked |
+| D-015 | 2026-05-24 | Runtime identity prompt harus ringkas; detail reinforcement dijaga oleh fast-path dan benchmark. | Model kecil dapat menggemakan prompt panjang ketika konteks RAG tersedia. | Identitas tetap terkunci lewat fast-path, sementara jalur RAG lebih kecil risiko membocorkan protokol internal. | AI Builder | Locked |
+
+## Template Keputusan Baru
+
+```text
+ID:
+Tanggal:
+Keputusan:
+Alasan:
+Dampak:
+Alternatif yang ditolak:
+Owner:
+Status: Proposed / Locked / Revisit
+```

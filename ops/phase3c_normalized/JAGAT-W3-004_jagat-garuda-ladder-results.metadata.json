@@ -1,0 +1,20 @@
+{
+  "id": "JAGAT-W3-004",
+  "status": "curated",
+  "title": "Garuda Ladder Benchmark Results — 7B vs 14B",
+  "source": "jagat-garuda-ladder-results",
+  "category": "infrastructure",
+  "doc_type": "md",
+  "owner": "Faturachman Al Kahfi",
+  "created_at": "2026-06-06",
+  "trust_level": "core_team_verified",
+  "provenance": "ops folder — live benchmark output from garuda-ladder-benchmark.mjs against Server B models",
+  "notes": "7b: 66/100 L2 Cakra (5.25 tok/s). 14b: 67/100 L2 Cakra (2.59 tok/s). Both fail instruction discipline 0/20.",
+  "local_path": "C:\\JAGAT\\ops\\GARUDA_LADDER_RESULTS.md",
+  "sha256": "B474BD3EF06080FE49AE6D42EF04966287EC5C16BC2DD2DE5111B52528913C93",
+  "size_bytes": 15668,
+  "extraction": {
+    "status": "normalized",
+    "doc_type": "md"
+  }
+}

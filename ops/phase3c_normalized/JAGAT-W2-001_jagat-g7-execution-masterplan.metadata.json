@@ -1,0 +1,20 @@
+{
+  "id": "JAGAT-W2-001",
+  "status": "curated",
+  "title": "JAGAT G7 Execution Masterplan",
+  "source": "jagat-g7-execution-masterplan",
+  "category": "roadmap",
+  "doc_type": "md",
+  "owner": "Faturachman Al Kahfi",
+  "created_at": "2026-05-20",
+  "trust_level": "founder_verified",
+  "provenance": "local project root — core execution masterplan authored by founder + AI Builder",
+  "notes": "Master execution plan covering Phase 1-6, workflow, backlog, and anti-chaos rules.",
+  "local_path": "C:\\JAGAT\\JAGAT_G7_EXECUTION_MASTERPLAN.md",
+  "sha256": "AC058909967FE68136B7B45050FFEE7DA8B8CA8DD8D1504A8DF7CF634F868A0E",
+  "size_bytes": 17544,
+  "extraction": {
+    "status": "normalized",
+    "doc_type": "md"
+  }
+}

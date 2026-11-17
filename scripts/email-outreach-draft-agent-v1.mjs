@@ -2,13 +2,14 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { createHash } from "node:crypto";
+import { pathToFileURL } from "node:url";
+import { campaignLeadEligibility, hasOutreachRefusal, isValidCampaignPolicy, normalizedCompany } from "./outreach-campaign-guard.mjs";
+import { runRevenueNotification, sendRevenueTelegram } from "./revenue-notification.mjs";
 import { isPlausibleOutreachEmail } from "./email-quality-guard.mjs";
 import { readRevenueStatusSnapshot } from "./revenue-status-snapshot.mjs";
 import {
   computeDraftHash,
   buildEventKey,
-  isEventAlreadySent,
-  recordTelegramEvent,
 } from "./telegram-event-guard.mjs";
 
 const ROOT = process.cwd();
@@ -25,20 +26,26 @@ const OPENCLAW_CONFIG = path.join(
   "openclaw.json",
 );
 
-async function loadSentEmails() {
-  const sent = new Set();
-  try {
-    const raw = (await fs.readFile(SEND_LEDGER_PATH, "utf8")).replace(/^\uFEFF/, "");
-    for (const line of raw.split(/\r?\n/).filter(Boolean)) {
-      try {
-        const item = JSON.parse(line);
-        if (item.status === "sent" && item.to) {
-          sent.add(item.to.toLowerCase().trim());
-        }
-      } catch {}
-    }
-  } catch {}
-  return sent;
+async function loadOutreachHistory() {
+  let raw;
+  try { raw = (await fs.readFile(SEND_LEDGER_PATH, "utf8")).replace(/^\uFEFF/, ""); }
+  catch (error) { if (error.code === 'ENOENT') return []; throw error; }
+  // Unknown/corrupt history must not silently resurrect a previously attempted lead.
+  return raw.split(/\r?\n/).filter(Boolean).map(line => {
+    const event = JSON.parse(line);
+    if (!event || typeof event !== 'object' || Array.isArray(event)) throw new Error('Invalid outreach ledger record.');
+    return event;
+  });
+}
+
+async function loadCampaignPolicy() {
+  let raw;
+  try { raw = await fs.readFile(path.join(REVENUE_DIR, "AUTO_SEND_POLICY.json"), "utf8"); }
+  catch (error) { if (error.code === 'ENOENT') return null; throw error; }
+  const policy = JSON.parse(raw.replace(/^\uFEFF/, ""));
+  if (policy?.enabled === false) return null;
+  if (!isValidCampaignPolicy(policy)) throw new Error('Campaign policy is invalid; refusing to generate campaign drafts.');
+  return policy;
 }
 
 async function loadSuppressedEmails() {
@@ -111,30 +118,31 @@ function scoreLead(lead) {
   return score;
 }
 
-function isEligibleForNewDraft(lead, sentSet, suppressedSet = new Set()) {
+export function isEligibleForNewDraft(lead, sentSet, suppressedSet = new Set(), campaignPolicy = null) {
   const contact = String(lead.public_contact || "").trim().toLowerCase();
   if (suppressedSet.has(contact)) return false;
   if (!isPlausibleOutreachEmail(contact)) return false;
-  const status = String(lead.status || "").trim().toLowerCase();
-  if (["emailed", "sent", "suppressed", "unsubscribed", "rejected", "declined", "do_not_contact", "opted_out", "closed_lost", "not_interested"].includes(status)) return false;
-  const response = String(lead.response || "");
-  if (/\b(?:not interested|do not contact|unsubscribe|remove me|stop emailing|tidak tertarik|jangan hubungi|berhenti berlangganan|hapus alamat email)\b/i.test(response)) return false;
+  if (hasOutreachRefusal(lead)) return false;
+  if (campaignPolicy && !campaignLeadEligibility(lead, campaignPolicy).ok) return false;
   if (sentSet && sentSet.has(contact)) {
     return false;
   }
   return true;
 }
 
-function topLeads(leads, sentSet = new Set(), limit = 5, suppressedSet = new Set()) {
+export function topLeads(leads, sentSet = new Set(), limit = 5, suppressedSet = new Set(), campaignPolicy = null, history = []) {
   const seenRecipients = new Set();
+  const seenCompanies = new Set(campaignPolicy ? history.filter(event => ['attempted', 'sent', 'unknown'].includes(event.status)).map(event => normalizedCompany(event.company)).filter(Boolean) : []);
   return leads
-    .filter((lead) => isEligibleForNewDraft(lead, sentSet, suppressedSet))
+    .filter((lead) => isEligibleForNewDraft(lead, sentSet, suppressedSet, campaignPolicy))
     .map((lead) => ({ ...lead, _score: scoreLead(lead) }))
     .sort((a, b) => b._score - a._score)
     .filter((lead) => {
       const recipient = String(lead.public_contact || "").trim().toLowerCase();
-      if (seenRecipients.has(recipient)) return false;
+      const company = campaignPolicy ? normalizedCompany(lead.company_or_person) : '';
+      if (seenRecipients.has(recipient) || (company && seenCompanies.has(company))) return false;
       seenRecipients.add(recipient);
+      if (company) seenCompanies.add(company);
       return true;
     })
     .slice(0, limit);
@@ -194,14 +202,14 @@ function buildEmailPayload(lead) {
   return { to, subject, text, html, draftHash, company: lead.company_or_person, source: lead.source, approvalStatus: "pending" };
 }
 
-function buildDrafts(leads) {
+function buildDrafts(leads, campaignPolicy = null) {
   const now = stamp();
   return [
     "# Email Outreach Drafts Today",
     "",
     `Generated: ${now}`,
-    "Mode: kampanye otomatis terbatas untuk kontak role mailbox domain resmi; draft lain tetap memerlukan review founder",
-    "Safety: maksimal 1 percobaan per 24 jam; tanpa follow-up; kontak STOP masuk suppression sebelum siklus selanjutnya",
+    campaignPolicy ? "Mode: kampanye D-052; hanya role mailbox domain resmi dengan bukti official_site" : "Mode: review founder; approval exact penerima/hash diperlukan sebelum kirim",
+    campaignPolicy ? "Safety: maksimal 1 percobaan per 24 jam; tanpa follow-up; kontak STOP masuk suppression sebelum siklus selanjutnya" : "Safety: maksimal 1 per siklus, 5 percobaan/hari; tidak ada pengiriman tanpa approval exact",
     "",
     "## Cara Pakai",
     "1. Review penerima, sumber, subject, dan body draft ini.",
@@ -228,24 +236,24 @@ function buildDrafts(leads) {
       "",
     ].join("\n")),
     "## Batas Kirim Hari Ini",
-    "- Maksimal 1 email otomatis per 24 jam; tidak ada follow-up otomatis.",
-    "- Hanya alamat role mailbox dari domain situs resmi; alamat pribadi dan direktori dikecualikan.",
+    campaignPolicy ? "- Maksimal 1 email otomatis per 24 jam; tidak ada follow-up otomatis." : "- Maksimal 1 email per siklus dan 5 percobaan/hari setelah approval exact.",
+    campaignPolicy ? "- Hanya alamat role mailbox dari domain situs resmi; alamat pribadi dan direktori dikecualikan." : "- Review sumber dan penerima sebelum memberikan approval exact.",
     "- Kalau calon klien menolak, jangan hubungi lagi.",
   ].join("\n");
 }
 
-function buildApprovalInbox(leads) {
+function buildApprovalInbox(leads, campaignPolicy = null) {
   return [
     "# JAGAT Outreach Approval Inbox",
     "",
     `Generated: ${stamp()}`,
-    "Mode: review founder; satu approval exact per pesan; sender memproses maksimal satu pesan per siklus",
+    campaignPolicy ? "Mode: kampanye D-052 aktif; hanya kandidat terverifikasi, maksimum satu email per 24 jam dan per siklus" : "Mode: review founder; satu approval exact per pesan; sender memproses maksimal satu pesan per siklus",
     "",
     "## Prinsip",
     "- JAGAT boleh mencari prospek, menilai prioritas, dan membuat draft.",
-    "- JAGAT tidak mengirim email tanpa approval founder yang mengikat alamat dan hash isi pesan.",
-    "- Tanpa approval, jadwal hanya mencari prospek, membuat draft, dan mengirim laporan Telegram.",
-    "- Maksimal 5 percobaan per hari; bulk outreach tetap dilarang.",
+    "- Di luar kampanye D-052, pengiriman memerlukan approval founder yang mengikat alamat dan hash isi pesan.",
+    "- D-052 tetap memerlukan kebijakan aktif, bukti situs resmi, role mailbox, status aman, suppression dan pemeriksaan riwayat saat kirim.",
+    "- D-052: maksimum 1 per 24 jam, tanpa follow-up. Mode approval exact: maksimum 5 percobaan/hari. Bulk dilarang.",
     "",
     "## Siap Review Hari Ini",
     ...(leads.length
@@ -263,7 +271,7 @@ function buildApprovalInbox(leads) {
     "",
     "## Setelah Approval / Balasan",
     "- Update `response` jika ada balasan.",
-    "- Update `follow_up_due` untuk follow-up 24/48 jam.",
+    "- Jangan jadwalkan follow-up otomatis; kampanye D-052 hanya pesan awal.",
     "- Jangan follow-up jika prospek menolak.",
   ].join("\n");
 }
@@ -282,7 +290,7 @@ async function readOpenClawTelegramConfig() {
   }
 }
 
-async function sendTelegram(leads) {
+async function sendTelegram(leads, campaignPolicy = null) {
   const fallback = await readOpenClawTelegramConfig();
   const botToken = process.env.TELEGRAM_BOT_TOKEN || fallback.botToken;
   const chatId = process.env.TELEGRAM_FOUNDER_CHAT_ID || fallback.chatId;
@@ -292,7 +300,7 @@ async function sendTelegram(leads) {
   const runtimeStatus = await readLocalRuntimeStatus();
   // === TELEGRAM EVENT DEDUPLICATION (WP-A) ===
   // Runtime health changes must create a fresh event even when draft content is unchanged.
-  const draftContent = `${leads.map((lead) => `${lead.company_or_person}:${buildEmailPayload(lead).draftHash}`).join('|')}|runtime:${status.overall}:${status.scheduledCycle.state}:${status.scheduledCycle.lastTaskResult}:${runtimeStatus}`;
+  const draftContent = `${leads.map((lead) => `${lead.company_or_person}:${buildEmailPayload(lead).draftHash}`).join('|')}|runtime:${status.scheduledCycle.state}:${status.scheduledCycle.lastTaskResult}:${runtimeStatus}`;
   const draftVersion = computeDraftHash(draftContent);
   const leadIds = leads.map((l) => l.company_or_person).join('_');
   const eventKey = buildEventKey({
@@ -302,17 +310,11 @@ async function sendTelegram(leads) {
     event_type: 'EMAIL_DRAFT_BATCH',
   });
 
-  const alreadySent = await isEventAlreadySent(eventKey);
-  if (alreadySent) {
-    console.log(`[TelegramGuard] EMAIL_DRAFT_BATCH already delivered for key "${eventKey}". Skipping redundant broadcast.`);
-    return { skipped: true, eventKey };
-  }
-
   const lines = [
     `Email Draft Agent v1 - ${stamp()}`,
     "",
     `Draft dibuat: ${leads.length}`,
-    "Mode: founder review + approval exact penerima/hash; maksimal 1 pesan per siklus dan 5 percobaan/hari.",
+    campaignPolicy ? "Mode: D-052, role mailbox situs resmi; maksimum 1 email per 24 jam dan per siklus; tanpa follow-up." : "Mode: founder review + approval exact penerima/hash; maksimal 1 pesan per siklus dan 5 percobaan/hari.",
     "",
     "Prioritas:",
     ...leads.map((lead, index) => `${index + 1}. ${lead.company_or_person} - ${subjectFor(lead)}`),
@@ -322,33 +324,14 @@ async function sendTelegram(leads) {
   const counts = status.outreach.counts;
   lines.push("", "Workflow monitoring (read-only):", `Pipeline: ${status.overall}; scheduler: ${status.scheduledCycle.status}/${status.scheduledCycle.state}; last result: ${status.scheduledCycle.lastTaskResult ?? "unknown"}; next: ${status.scheduledCycle.nextRunTime ?? "unavailable"}.`, `Runtime: ${runtimeStatus}.`, `Artifacts: discovery ${status.artifacts["latest-prospect-discovery.md"].status}, drafts ${status.artifacts["OUTREACH_DRAFTS.json"].status}. Telegram brief/drafts: ${status.notifications.brief.status}/${status.notifications.draftBatch.status}.`, `Email ledger: sent ${counts?.sent ?? "unknown"}, failed ${counts?.failed ?? "unknown"}, blocked ${status.outreach.otherStatuses?.blocked ?? "unknown"}; latest event: ${status.outreach.newestEventAt ?? "unavailable"}.`);
 
-  const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      chat_id: chatId,
-      text: lines.join("\n"),
-      disable_web_page_preview: true,
-    }),
-    signal: AbortSignal.timeout(30_000),
+  return sendRevenueTelegram({
+    botToken, chatId, text: lines.join("\n"),
+    event: {
+      event_key: eventKey, lead_id: leadIds, campaign_id: 'camp-id-b2b-q4',
+      draft_version: draftVersion, event_type: 'EMAIL_DRAFT_BATCH',
+      summary: `Draft batch for ${leads.length} leads; pipeline ${status.overall}; scheduler ${status.scheduledCycle.state}/${status.scheduledCycle.lastTaskResult ?? "unknown"}; ${runtimeStatus}`,
+    },
   });
-
-  if (!response.ok) {
-    const text = await response.text().catch(() => response.statusText);
-    throw new Error(`Telegram send failed (${response.status}): ${text}`);
-  }
-
-  await recordTelegramEvent({
-    event_key: eventKey,
-    lead_id: leadIds,
-    campaign_id: 'camp-id-b2b-q4',
-    draft_version: draftVersion,
-    event_type: 'EMAIL_DRAFT_BATCH',
-    summary: `Draft batch for ${leads.length} leads; pipeline ${status.overall}; scheduler ${status.scheduledCycle.state}/${status.scheduledCycle.lastTaskResult ?? "unknown"}; ${runtimeStatus}`,
-  });
-
-  console.log(`[TelegramGuard] EMAIL_DRAFT_BATCH delivered and recorded in ledger (event_key: "${eventKey}").`);
-  return { skipped: false, eventKey };
 }
 
 async function readLocalRuntimeStatus() {
@@ -362,47 +345,46 @@ async function readLocalRuntimeStatus() {
 
 async function main() {
   const tracker = await readText(TRACKER_PATH);
-  const sentSet = await loadSentEmails();
+  const history = await loadOutreachHistory();
+  const sentSet = new Set(history.filter(event => ['attempted', 'sent', 'unknown'].includes(event.status)).map(event => String(event.to || '').trim().toLowerCase()));
   const suppressedSet = await loadSuppressedEmails();
-  const leads = topLeads(parseCsv(tracker), sentSet, 5, suppressedSet);
+  const campaignPolicy = await loadCampaignPolicy();
+  const leads = topLeads(parseCsv(tracker), sentSet, 5, suppressedSet, campaignPolicy, history);
   if (!leads.length) {
-    const empty = buildApprovalInbox([]);
+    const empty = buildApprovalInbox([], campaignPolicy);
     await fs.writeFile(OUTPUT_PATH, [
       "# Email Outreach Drafts Today",
       "",
       `Generated: ${stamp()}`,
-      "Mode: founder review + approval satu pesan; sender otomatis berjalan setelah approval valid",
-      "Safety: tanpa approval persis tidak ada email terkirim; maksimal 5 percobaan/hari",
+      campaignPolicy ? "Mode: kampanye D-052 aktif; hanya kandidat dengan bukti situs resmi dan role mailbox" : "Mode: review founder + approval satu pesan",
+      campaignPolicy ? "Safety: maksimum 1 email per 24 jam, tanpa follow-up; semua pemeriksaan sender tetap wajib" : "Safety: tanpa approval persis tidak ada email terkirim; maksimal 5 percobaan/hari",
       "",
-      "Belum ada prospek ber-email yang lolos status, suppression, dan pemeriksaan placeholder untuk draft saat ini.",
+      "Belum ada prospek yang lolos pemeriksaan status, suppression, riwayat, kualitas alamat, dan kebijakan campaign aktif.",
       "Discovery agent akan terus mencari prospek baru; approval lama tidak cocok dengan draft yang berubah.",
     ].join("\n"), "utf8");
     await fs.writeFile(APPROVAL_PATH, empty, "utf8");
     await fs.writeFile(MACHINE_DRAFTS_PATH, "[]\n", "utf8");
     console.log("EMAIL_DRAFT_AGENT=PASS");
-    console.log("DRAFTS=0 (Semua email lama sudah dikirimi)");
+    console.log("DRAFTS=0 (Tidak ada kandidat yang lolos pemeriksaan saat ini)");
     console.log(`APPROVAL_INBOX=${APPROVAL_PATH}`);
-    console.log("TELEGRAM_SENT=false");
+    await runRevenueNotification({ enabled: shouldSendTelegram, eventType: "EMAIL_DRAFT_BATCH", send: () => sendTelegram([], campaignPolicy) });
     return;
   }
 
-  const output = buildDrafts(leads);
+  const output = buildDrafts(leads, campaignPolicy);
   const machineDrafts = leads.map(buildEmailPayload);
   await fs.writeFile(MACHINE_DRAFTS_PATH, `${JSON.stringify(machineDrafts, null, 2)}\n`, "utf8");
   await fs.writeFile(OUTPUT_PATH, output, "utf8");
-  await fs.writeFile(APPROVAL_PATH, buildApprovalInbox(leads), "utf8");
+  await fs.writeFile(APPROVAL_PATH, buildApprovalInbox(leads, campaignPolicy), "utf8");
 
-  if (shouldSendTelegram) {
-    await sendTelegram(leads);
-  }
+  await runRevenueNotification({ enabled: shouldSendTelegram, eventType: "EMAIL_DRAFT_BATCH", send: () => sendTelegram(leads, campaignPolicy) });
 
   console.log("EMAIL_DRAFT_AGENT=PASS");
   console.log(`DRAFTS=${OUTPUT_PATH}`);
   console.log(`APPROVAL_INBOX=${APPROVAL_PATH}`);
-  console.log(`TELEGRAM_SENT=${shouldSendTelegram ? "true" : "false"}`);
 }
 
-main().catch((err) => {
+if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) main().catch((err) => {
   console.error("EMAIL_DRAFT_AGENT=FAIL");
   console.error(err instanceof Error ? err.message : String(err));
   process.exitCode = 1;

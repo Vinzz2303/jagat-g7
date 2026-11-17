@@ -1,0 +1,42 @@
+{
+  "phase": "3D",
+  "generated_at": "2026-05-21T14:13:41.281Z",
+  "source_report": "ops\\phase3c_reports\\extraction_report_wave1.json",
+  "policy": {
+    "target_chars": 1400,
+    "max_chars": 2200,
+    "overlap_chars": 180,
+    "ingest_performed": false,
+    "next_phase": "3E"
+  },
+  "total_chunks": 55,
+  "documents": [
+    {
+      "id": "JAGAT-W1-001",
+      "title": "JAGAT G7 Technical Blueprint",
+      "source": "jagat-g7-technical-blueprint",
+      "chunk_count": 14,
+      "min_chars": 285,
+      "max_chars": 2172,
+      "avg_chars": 1344
+    },
+    {
+      "id": "JAGAT-W1-002",
+      "title": "JAGAT G7 Sovereign Roadmap",
+      "source": "jagat-g7-sovereign-roadmap",
+      "chunk_count": 10,
+      "min_chars": 215,
+      "max_chars": 807,
+      "avg_chars": 388
+    },
+    {
+      "id": "JAGAT-W1-003",
+      "title": "JAGAT G7 Project Milestones V5",
+      "source": "jagat-g7-project-milestones-v5",
+      "chunk_count": 31,
+      "min_chars": 162,
+      "max_chars": 564,
+      "avg_chars": 191
+    }
+  ]
+}

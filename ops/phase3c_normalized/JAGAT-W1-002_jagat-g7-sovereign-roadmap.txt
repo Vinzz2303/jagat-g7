@@ -1,0 +1,154 @@
+---
+id: JAGAT-W1-002
+title: JAGAT G7 Sovereign Roadmap
+source: jagat-g7-sovereign-roadmap
+category: roadmap
+doc_type: pdf
+owner: Faturachman Al Kahfi
+created_at: 2026-05-20
+trust_level: founder_verified
+provenance: local file from founder workstation Downloads folder
+sha256: 2E1BD914218CBC344F7FAED07AE7E43E8AAEDEA25CB192B9FE3273B8245D17BE
+notes: Strategic roadmap reference for execution sequencing and long-term direction.
+---
+
+## OCR Page 1
+
+\ YN
+JU
+Ej = id Wm = WE ERVA SI SI STEN [INF ELLIEGENCEE EORE
+Strategic Masterplan & Public Market Readiness — Faturachman Alkahfi
+
+## OCR Page 2
+
+| The 1 Apex Minds Synthesis
+ASE - ro |£ a) . .
+/ Jos wal h [€) | 1 Minds. One Brain.
+‘ - a 1 [EN
+3 i rN ———
+| = Xo Rh Af JAGAT G7 mengagregasi pola nalar dari GPT, Claude, Gemini, Grog,
+E | ny he 4 S) — Mistral, Llama, dan DeepSeek ke dalam satu sasis lokal.
+\ ben) = : 4
+&: (C&&-55 = — 4
+ee — |
+= - re ——— "Garuda terbang di atas awan, bukan bergantung padanya.”
+A — CE SAE or n — 9g L g gp ya
+<= a = /
+eT = 7
+S——ty g f :
+BB a a —
+
+## OCR Page 3
+
+o.
+Infrastructure Integrity
+Data tidak pernah meninggalkan memori fisik Ryzen 5 3600 & 32GB
+RAM lu. Kedaulatan data mutlak pada IP 103.190.0.113.
+$# Native Node v26 Runtime
+S Redis & Qdrant Portable Execution
+© Hardened Firewall Protection
+
+## OCR Page 4
+
+I Bs
+| Strategic Roadmap Evolution
+F1: Ignition F2: Synthesis F3: Ingestion F4: Agents F5: Gateway F&: IPO
+Infrastructure Live & Patched Multi-Model Prompt Injunction Vector Knowledge Ingest Kiting & Ting Al Activation Midtrans & API Monetization Public Market Capital
+Expansion
+iE a
+
+## OCR Page 5
+
+| Phase 1: Success Ignition
+(0) Milestones Achieved:
+Migrasi Bare-Metal sukses. Hot-patch Redis Singleton dan Qdrant
+(0) Undici Bypass selesai. Sistem siap untuk ekspansi data kognitif.
+SOVEREIGN LIVE
+
+## OCR Page 6
+
+Intelligence per =
+g . ——_— / =
+RAgregations = A [WP
+— 71 N Sle [oo
+- +A re
+Distilasi Kognitif Berlapis at # )
+’ . »
+Ha Lh Ae of
+Fase 2 & 3 fokus pada pengasahan nalar Llama 3 agar memiliki 'S B . ,. a Ue——==
+pola pikir setara 7 model apex dunia via Qdrant Retrieval NZ Sl Pr se
+Augmented Generation. _——— Rk J &
+(2): a L=
+Ingesti data riset eksklusif ke dalam koleksi oy A (> -
+Jjagat_indonesia_knowledge tanpa kebocoran cloud. pesiie LT .- | *
+= —— SE
+ra —e
+Wr a ~ .
+Ei ZA i ek
+- P= f=" ee —___
+i /
+——— ff
+9 Y J —— - J
+
+## OCR Page 7
+
+un
+| Downstream Functional Agents
+¥ od
+KITING AI TING AI
+Universal Task Assistant. Melibas Financial Risk Copilot. Literasi risiko
+produkftivitas harian, coding. dan terstruktur dan andlisis pasar modal
+general reasoning dari Otak Utama G7. bagi investor ritel Indonesia.
+
+## OCR Page 8
+
+Sovereign Capital Scalability: Exit Strategy via Initial Public Offering (IPO)
+Mengtransformasikan JAGAT G7 menjadi entitas publik melalui pencatatan saham
+perdana di bursa efek, memberikan likuiditas global untuk mendanai kedaulatan Al
+
+dalam skala mega-infrastruktur.
+
+## OCR Page 9
+
+| Node Endpoints Matrix
+©
+©
+(]
+(]
+
+## OCR Page 10
+
+I 23
+| System Resiliency Protocol
+(!) Auto-Boot Orchestrator
+Penerapan startup scripts memastikan seluruh stack (Redis, Qdrant, Ollama, BFF) langsung bangkit pasca reboot server.
+[E> Memory Persistence
+Sinkronisasi ofomatis dump.rdb dan WAL Qdrant menjamin ingatan Al tidak hilang meskipun daya terputus.
+iE a
+
+## OCR Page 11
+
+FUTURE RERDY
+Dari sasis fisik menuju Bursa Efek. JAGAT G7 bukan sekadar teknologi, ini adalah aset
+kedaulatan bangsa.
+
+## OCR Page 12
+
+Thank you for witnessing the birth of Garuda 7.
+IP: 183.198.8113 | PORT: S88212
+
+## OCR Page 13
+
+3 Bs
+a https://png.pngtree.com/png-clipart/20250817/original/pngtree-neon-blue-eagle-emblem-with-outstretched-wings-and-glowing-stars-above-png-image_21606917. png
+3 A ) Source: pngtree.com
+P- https://png pngtree.com/thumb_back/fh260/background/20260426/pngtree-a-laptop-displays-digital-brain-of-blue-glowing-lines-and-nodes-image_21758505.webp
+J on ®
+em Source: pngtree.com
+H i : https://media.istockphoto.com/id/1335891887/photo/server-room jpg ?s=612x612&w=08&k=20&c=4mulL A6cLOIULPQP _qdOweco2tMjshQMuiSLC3INZKDU=
+i tp P! P! JPY 9 J
+[ 5 Source: www.istockphoto.com
+Ere mEoe https://media.istockphoto.com/id/1487201189/vector/stock-exchange-board-background-market-index jpg ?s=612x612&w=08k=20&c=L FoCiY 4EMrWISHOQYitnp8d_P4AgslA _xjxiOVK
+Ee oo I
+SEEEEE source www.istockphoto.com
+Res =

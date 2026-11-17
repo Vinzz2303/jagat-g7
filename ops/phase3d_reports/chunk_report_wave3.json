@@ -1,0 +1,79 @@
+{
+  "phase": "3D",
+  "wave": 3,
+  "generated_at": "2026-06-06T23:20:28.514Z",
+  "source_report": "ops\\phase3c_reports\\extraction_report_wave3.json",
+  "policy": {
+    "target_chars": 1400,
+    "max_chars": 2200,
+    "overlap_chars": 180,
+    "ingest_performed": false,
+    "next_phase": "3E"
+  },
+  "total_chunks": 131,
+  "documents": [
+    {
+      "id": "JAGAT-W3-001",
+      "title": "JAGAT G7 Agent Boundary Design — Phase 4",
+      "source": "jagat-g7-agent-boundary-design",
+      "chunk_count": 32,
+      "min_chars": 106,
+      "max_chars": 1061,
+      "avg_chars": 325
+    },
+    {
+      "id": "JAGAT-W3-002",
+      "title": "JAGAT G7 Commercial Readiness Minimum",
+      "source": "jagat-g7-commercial-readiness-minimum",
+      "chunk_count": 20,
+      "min_chars": 92,
+      "max_chars": 915,
+      "avg_chars": 372
+    },
+    {
+      "id": "JAGAT-W3-003",
+      "title": "JAGAT Garuda Ladder — Model Classification System",
+      "source": "jagat-garuda-ladder",
+      "chunk_count": 13,
+      "min_chars": 79,
+      "max_chars": 489,
+      "avg_chars": 238
+    },
+    {
+      "id": "JAGAT-W3-004",
+      "title": "Garuda Ladder Benchmark Results — 7B vs 14B",
+      "source": "jagat-garuda-ladder-results",
+      "chunk_count": 22,
+      "min_chars": 158,
+      "max_chars": 1281,
+      "avg_chars": 701
+    },
+    {
+      "id": "JAGAT-W3-005",
+      "title": "JAGAT G7 Cognitive Pipeline Audit",
+      "source": "jagat-g7-cognitive-pipeline-audit",
+      "chunk_count": 19,
+      "min_chars": 154,
+      "max_chars": 1292,
+      "avg_chars": 535
+    },
+    {
+      "id": "JAGAT-W3-006",
+      "title": "Next Strategic Actions — PM Priority 2026-06-06",
+      "source": "jagat-g7-next-strategic-actions",
+      "chunk_count": 14,
+      "min_chars": 71,
+      "max_chars": 566,
+      "avg_chars": 277
+    },
+    {
+      "id": "JAGAT-W3-007",
+      "title": "Remote Model Worker B — Operational Runbook",
+      "source": "jagat-remote-model-worker-b-runbook",
+      "chunk_count": 11,
+      "min_chars": 184,
+      "max_chars": 806,
+      "avg_chars": 409
+    }
+  ]
+}

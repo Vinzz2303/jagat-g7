@@ -1,0 +1,20 @@
+{
+  "id": "JAGAT-W3-007",
+  "status": "curated",
+  "title": "Remote Model Worker B — Operational Runbook",
+  "source": "jagat-remote-model-worker-b-runbook",
+  "category": "infrastructure",
+  "doc_type": "md",
+  "owner": "Faturachman Al Kahfi",
+  "created_at": "2026-06-06",
+  "trust_level": "core_team_verified",
+  "provenance": "ops folder — Server B (Azure India 100.107.244.82) operational guide for Ollama remote worker",
+  "notes": "Covers network layout (Tailscale), model inventory, env variables, health checks, troubleshooting, and model upgrade procedures for remote inference worker.",
+  "local_path": "C:\\JAGAT\\ops\\REMOTE_MODEL_WORKER_B_RUNBOOK.md",
+  "sha256": "EC499649C0EA75152AA27C3AE987FD7F453D75C5B15077C87462A5C0D383F901",
+  "size_bytes": 4524,
+  "extraction": {
+    "status": "normalized",
+    "doc_type": "md"
+  }
+}

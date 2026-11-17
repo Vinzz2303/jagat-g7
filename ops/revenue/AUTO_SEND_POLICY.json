@@ -1,0 +1,10 @@
+{
+  "enabled": true,
+  "policyVersion": "2026-11-07-v1",
+  "authorizedBy": "Faturachman Al Kahfi",
+  "authorizedAt": "2026-11-07",
+  "maxPerCycle": 1,
+  "maxPerDay": 1,
+  "followups": false,
+  "allowedRoleLocalParts": ["info", "contact", "sales", "marketing", "admin", "cs", "support", "office", "hello"]
+}

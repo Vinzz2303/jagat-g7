@@ -123,7 +123,7 @@ ew, so this record is no longer eligible.
 ## Ops automation checkpoint - 2026-11-05 11:28 PST
 The health probe now fails closed when Express returns 503; runtime remains degraded: BFF 503 and Qdrant unreachable, UI 200, auth gate 401. PM2 jagat-telegram-bots is online, and the revenue scheduled task is Ready with next run at 13:41:39. Colony development is not verified active and must not be enabled through the Telegram model-command executor until its shell execution boundary receives founder security review. No service restart, email send, Telegram send, or external provider call was made.
 ## Local ops watchdog - 2026-11-05 11:35 PST
-The JAGAT Ops Health Watchdog Scheduled Task is registered at a 15-minute interval. Its local-only checks include the BFF, UI, Colony auth gate, Qdrant, and the Telegram PM2 process; it sends only status transitions and a six-hour heartbeat to founder chat <FOUNDER_TELEGRAM_ID>. The first scheduled run completed with result 0 and recorded a Telegram notification. Current condition remains BFF HTTP 503 and Qdrant unreachable. No Colony development scheduler is proven active; do not use the Telegram model command executor as a coding worker pending security review.
+The JAGAT Ops Health Watchdog Scheduled Task is registered at a 15-minute interval. Its local-only checks include the BFF, UI, Colony auth gate, Qdrant, and the Telegram PM2 process; it sends only status transitions and a six-hour heartbeat to founder chat 8148465559. The first scheduled run completed with result 0 and recorded a Telegram notification. Current condition remains BFF HTTP 503 and Qdrant unreachable. No Colony development scheduler is proven active; do not use the Telegram model command executor as a coding worker pending security review.
 Watchdog update 2026-11-05 11:38 PST: Telegram status now includes backend-reported Redis/Qdrant/Ollama details. Current snapshot: Redis/Ollama healthy, Qdrant unreachable, BFF 503, UI/auth healthy, PM2 bot online. Changed status report was accepted by Telegram at 11:38; duplicates are suppressed until a status change or six-hour heartbeat.
 C6 verification correction 2026-11-05 11:39 PST: the Windows backend task is currently Running (node.exe dist/index.js; listener process started 2026-11-03 20:05:51). Current dist source includes startC6SchedulerLoop() on listen, but live scheduler status requires founder auth and was not queried. Treat C6 as likely started but unverified, not as confirmed absent or confirmed healthy.
 ## Safe dev workflow design - 2026-11-05 11:44 PST
@@ -241,45 +241,45 @@ Static inspection found that the owner-only JAGAT Telegram handler sends model-p
 
 ### Runtime blockers
 Docker service is stopped; vmcompute is running. Health check was 2/4: BFF 503 and Qdrant unavailable; UI 200 and Colony auth gate 401 expected. Do not treat latest source as active in PM2 until a founder-approved maintenance window reloads services and health is rechecked. No service was restarted.
-## C6 scheduler follow-up ï¿½ 2026-11-05 14:13 -08:00
+## C6 scheduler follow-up — 2026-11-05 14:13 -08:00
 Reviewed src/colony/scheduler-loop.ts and callers. The five-minute Promise.race timeout rejects the caller but cannot cancel the in-flight promise; outer finally clears 	ickInProgress, so a later timer/manual tick may overlap the still-running operation. Recorded review proposal at ops/colony-proposals/C6_SCHEDULER_TIMEOUT_CANCELLATION_2026-11-05.md with alternatives and required tests. No code change or live tick. Requires design/reviewer decision before implementation.
 
-## C6 timeout testability ï¿½ 2026-11-05 14:14 -08:00
+## C6 timeout testability — 2026-11-05 14:14 -08:00
 Confirmed scripts/c6-scheduler-reporter-test.mjs is not an offline smoke test: it bootstraps Colony, creates and Redis-mutates tasks, triggers live manual ticks, and forces reporter output. It was not run under current BFF 503/Qdrant failure. Proposal now requires deterministic delayed-dependency tests before using the live integration suite.
 
-## Outreach refusal suppression ï¿½ 2026-11-05 14:16 -08:00
+## Outreach refusal suppression — 2026-11-05 14:16 -08:00
 Draft selection now skips explicit rejection/opt-out statuses (ejected, declined, do_not_contact, opted_out, closed_lost, 
 ot_interested) and clear English/Indonesian refusal phrases in the tracker esponse field. This aligns draft generation with the operating instruction that a refusal ends contact. 
 ode --check and behavioral checks on the actual extracted eligibility function passed; normal leads remain eligible. Current tracker has no recorded responses/rejections. No real data or outbound action was changed.
 
-## Send-boundary refusal recheck ï¿½ 2026-11-05 14:18 -08:00
+## Send-boundary refusal recheck — 2026-11-05 14:18 -08:00
 scripts/revenue-outreach-email.mjs now re-reads the current prospect tracker after approval/hash validation and before SMTP initialization. It fails closed if the recipient is absent or the latest status/response indicates sent, suppression, rejection, opt-out, or lost deal. This closes the gap where an exact approval could remain valid after the prospect later opted out. Syntax and actual guard behavior checks pass. Existing sender smoke fixture currently has no tracker fixture and needs a separate update before full isolated sender smoke can pass against this guard. No real email or Telegram adapter was used.
 
-## Sender refusal regression test ï¿½ 2026-11-05 14:19 -08:00
+## Sender refusal regression test — 2026-11-05 14:19 -08:00
 Updated isolated smoke fixture with a temporary prospect tracker. A valid-looking draft and founder approval for a recipient whose latest response is Not interested is now rejected by the actual sender before SMTP. 
 ode --check and 
 pm run test:revenue-outreach-sender PASS using fake SMTP and local Telegram capture. No real prospect, approval file, email, or Telegram message was changed/sent.
 
-## Verification ï¿½ 2026-11-05 14:20 -08:00
+## Verification — 2026-11-05 14:20 -08:00
 Sender smoke passed in isolated fake-SMTP/local-Telegram environment, including refusal response recheck. Health remains 2/4 (BFF 503, Qdrant unavailable; UI 200, Colony auth gate 401 expected). Revenue task remains Ready but last run is 13:41:40/result 0, next 16:41:39; generated files are still timestamped 13:49. No current runtime proof of latest source and no live outbound.
 
-## Outreach blocked-status Telegram ï¿½ 2026-11-05 14:21 -08:00
+## Outreach blocked-status Telegram — 2026-11-05 14:21 -08:00
 When the sender's final tracker recheck blocks a previously approved recipient, it now reports generic BLOCKED status through the existing Telegram adapter. Message includes recipient and draft hash but omits raw response text. Notification failure cannot permit SMTP; the refusal still throws. Syntax and current isolated sender smoke pass; a dedicated assertion of the blocked Telegram payload is the next test-only task. No live outbound.
 
-## Blocked-status monitoring regression ï¿½ 2026-11-05 14:22 -08:00
+## Blocked-status monitoring regression — 2026-11-05 14:22 -08:00
 Isolated sender smoke now explicitly verifies the refusal path emits Telegram Outreach BLOCKED, includes the target recipient, and excludes raw Not interested response content. Syntax and complete revenue sender smoke PASS with fake SMTP/local capture. No live external send.
 
-## Scheduled-cycle preflight ï¿½ 2026-11-05 14:22 -08:00
-Revenue task is Ready, last run 13:41:40/result 0, next 16:41:39. Current output artifacts remain 13:49:39ï¿½13:49:41; approval directory is empty; send ledger has no current-day activity. The scheduled job has not run since recent source changes; await natural scheduled execution before claiming runtime proof. No external action was triggered.
+## Scheduled-cycle preflight — 2026-11-05 14:22 -08:00
+Revenue task is Ready, last run 13:41:40/result 0, next 16:41:39. Current output artifacts remain 13:49:39–13:49:41; approval directory is empty; send ledger has no current-day activity. The scheduled job has not run since recent source changes; await natural scheduled execution before claiming runtime proof. No external action was triggered.
 
-## Revenue runtime preflight ï¿½ 2026-11-05 14:23 -08:00
+## Revenue runtime preflight — 2026-11-05 14:23 -08:00
 Task Scheduler still reports Ready, last run 13:41:40/result 0 and next 16:41:39. Latest revenue files and Telegram event ledger remain 13:49, approval directory is empty, and outreach ledger remains unchanged since Aug 14. Latest source changes have not been exercised by a scheduled run. No manual trigger or external action.
 
-## Prospect-quality preflight ï¿½ 2026-11-05 14:24 -08:00
+## Prospect-quality preflight — 2026-11-05 14:24 -08:00
 The 13:49 discovery report contains three Rudy Hadisuwarno entries with the same recipient/site and a placeholder nything@getanyname.com. Discovery/draft source safeguards were edited later: shared email/profile dedupe and placeholder rejection plus one draft per normalized recipient. These safeguards are not runtime-proven yet; revenue task next run is 16:41:39, latest artifacts remain 13:49, and approvals are empty. No manual discovery or external delivery.
 
-## Prospect quality ranking proposal ï¿½ 2026-11-05 14:25 -08:00
-Latest approval inbox includes two logistics leads with generic directory-only hypotheses (ï¿½public emailï¿½ rather than evidence of need). Current copy appropriately states that the workflow is unknown, but scoring prioritizes email/contact/website signals and does not rank source evidence. Proposal ops/colony-proposals/REVENUE_PROSPECT_QUALITY_SCORING_2026-11-05.md defines a reviewed ranking policy and offline acceptance tests. No business logic/data changed pending approval. Runtime next scheduled run is 16:41:39; safeguards still awaiting proof.
+## Prospect quality ranking proposal — 2026-11-05 14:25 -08:00
+Latest approval inbox includes two logistics leads with generic directory-only hypotheses (“public email” rather than evidence of need). Current copy appropriately states that the workflow is unknown, but scoring prioritizes email/contact/website signals and does not rank source evidence. Proposal ops/colony-proposals/REVENUE_PROSPECT_QUALITY_SCORING_2026-11-05.md defines a reviewed ranking policy and offline acceptance tests. No business logic/data changed pending approval. Runtime next scheduled run is 16:41:39; safeguards still awaiting proof.
 
 ## Runtime and workflow check â€” 2026-11-05 14:27 -08:00
 Read all required MRP layers and Olive V2 notes. Current evidence: revenue task Ready, last run 13:41:40/result 0, next 16:41:39; discovery/brief artifacts remain 13:49 and approval directory is empty. PM2 shows jagat-telegram-bots online (PID 17528); runtime health remains 2/4 (BFF 503, UI 200, Colony auth gate 401 expected, Qdrant unavailable). No manual cycle, crawl, outbound, or service restart was performed. Existing log corruption in the recent revenue entries (control character in placeholder address and missing command prefixes) was repaired in the autonomous log. Telegram model-to-shell path remains a critical founder/security review item; Docker/BFF/Qdrant recovery needs an authorized maintenance window.
@@ -395,7 +395,7 @@ Screenshot Telegram mengonfirmasi respons model meminta menjalankan `Set-EmailSe
 Perbaikan di `src/colony/telegram-bot.ts`: keluaran model dengan action `run_command` sekarang ditolak dan tidak diteruskan ke `execAsync`; perintah tetap yang dipanggil oleh intent handler tidak diubah. Typecheck/build PASS dan PM2 `jagat-telegram-bots` berhasil reload serta berstatus online (PID berganti ke 15808). Screenshot founder menunjukkan model sebelumnya mencoba `Set-EmailService`; itu bukan jalur SMTP aplikasi dan jangan jalankan command hasil model.
 
 **Auto-outreach mandate (founder response 2026-11-07):** Founder mengizinkan workflow mencari prospek dan mengirim email otomatis dengan penilaian keselamatan delegated ke Colony Builder. Rencana default: hanya satu email awal per hari pada mailbox role bisnis, domain email harus cocok dengan website resmi yang menjadi source; abaikan free-mail, direktori saja, kontak suppressed/refusal, duplicate, dan follow-up; sertakan opt-out serta kirim hasil ke Telegram. SMTP creds/`.env` tidak diubah. First-party verified lead preview and next scheduled execution must be tested before claiming live send. Legal basis/recipient processing controls need documented review; Indonesia UU PDP recognizes consent and other bases including balanced legitimate interest, and PP 80/2019 allows electronic advertising subject to privacy/consumer rules.
-## Update 2026-11-07 ï¿½ constrained email campaign
+## Update 2026-11-07 — constrained email campaign
 Founder explicitly authorized automatic prospecting and email outreach and delegated the safety policy. D-052 and `ops/revenue/AUTO_SEND_POLICY.json` enable one initial email per rolling 24 hours and per cycle, only to an unsuppressed/non-refused role inbox with exact match to the official website domain and `official_site:` provenance. Free-mail, directory-only contacts, duplicates, and follow-ups are excluded; bulk remains disabled. Emails include a STOP line and status outcomes go to Telegram.
 
 Fake SMTP verification passes, including the constrained campaign path. No real email was sent during tests. Automatic inbound STOP processing does not exist: record any STOP reply in the suppression list manually before another cycle. The next scheduled run must be checked for a real SMTP outcome before claiming live delivery.

@@ -1,20 +1,57 @@
-# Local secrets and runtime-generated data
+# JAGAT G7 - Sovereign AI Core
+# Production & Security Ignore Rules
+
+# 1. Environment Secrets & API Keys (CRITICAL - DO NOT COMMIT)
 .env
 .env.*
 !.env.example
+*.local
+scratch_email.cjs
+wa-auth-state/
+.openclaw/
+
+# 2. Runtime Databases & Vector Stores
+data/*.sqlite
+data/*.sqlite-*
+data/*.db
+data/*.db-*
+qdrant_data/
+.qdrant-initialized
+
+# 3. Dependencies & Build Artifacts
 node_modules/
 dist/
 .next/
-data/
-qdrant_data/
-snapshots/
-wa-auth-state/
-.openclaw/
-*.sqlite*
-*.db*
-*.log
 *.tsbuildinfo
-*.mp3
+
+# 4. Logs
+*.log
+*.err
+*.out
+
+# 5. Large Archives & Binary Dumps (>50MB / GitHub limits)
 *.zip
 *.tar.gz
-scratch_email.cjs
+*.tar
+ops/local_export/
+snapshots/
+
+# 6. Third-party Clones & External Workspaces
+workspace/
+
+# 7. IDE & System Files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.git_backup/
+.git_backup/
+
+# 8. Temporary Files & Backup Extensions
+*.bak
+*.backup-*
+*.mp3
+ops/revenue/voice_notes/
+eng.traineddata
+test.js
+test2.js

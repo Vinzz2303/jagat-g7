@@ -1,0 +1,20 @@
+{
+  "id": "JAGAT-W2-007",
+  "status": "curated",
+  "title": "JAGAT G7 Weekly Execution Loop",
+  "source": "jagat-g7-weekly-execution-loop",
+  "category": "roadmap",
+  "doc_type": "md",
+  "owner": "Faturachman Al Kahfi",
+  "created_at": "2026-05-20",
+  "trust_level": "founder_verified",
+  "provenance": "ops folder — operational rhythm for founder + AI fleet",
+  "notes": "Defines daily micro-loop and weekly cadence (Mon-Fri) for execution discipline.",
+  "local_path": "C:\\JAGAT\\ops\\WEEKLY_EXECUTION_LOOP.md",
+  "sha256": "ED3AE5933FDED75FA7C0C965A50F5F2794835019E768EF9E429F572D12F892DD",
+  "size_bytes": 1432,
+  "extraction": {
+    "status": "normalized",
+    "doc_type": "md"
+  }
+}

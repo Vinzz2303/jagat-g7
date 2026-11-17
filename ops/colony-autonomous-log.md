@@ -207,11 +207,11 @@
 - **Notes:** Menghentikan perulangan pesan spam 3-jam sekali pada bot Telegram Mas Fatur. Siap menunggu approval untuk WP-B.
 
 ## [2026-10-30 18:05 UTC] Program: Phase 1 Live SMTP Whitelist & Idempotency Integration
-- **Task:** Integrasi pengiriman email riil via Nodemailer Gmail SMTP (port 465 SSL) dengan Whitelist Guard ke email founder (`<founder-email>`) pada Phase 1 Operations Console.
+- **Task:** Integrasi pengiriman email riil via Nodemailer Gmail SMTP (port 465 SSL) dengan Whitelist Guard ke email founder (`faturachmanalkahfi7@gmail.com`) pada Phase 1 Operations Console.
 - **Files:** `c:\apps\jagat-phase-1-console\server.ts`, `c:\apps\jagat-phase-1-console\src\phase1\engine.ts`, `c:\apps\jagat-phase-1-console\src\components\TelegramApprovalView.tsx`, `c:\apps\jagat-phase-1-console\src\App.tsx`, `c:\JAGAT\src\phase1\engine.ts`
 - **Changes:** Menambahkan tombol "âš¡ Kirim Nyata ke Gmail Saya" di tab Telegram Approval Gate. Endpoint `/api/phase1/outreach/send` mendeteksi `live_smtp: true` dan meneruskan payload melalui Nodemailer SMTP menggunakan kredensial terverifikasi di `.env`. Memperoleh Message-ID resmi dari server Gmail dan mencatatnya ke Idempotency Ledger. Unit test 6/6 pass, typecheck 0 errors.
 - **Status:** success
-- **Verification:** Uji kirim langsung sukses: `[SMTP Live] Email dispatched to <founder-email>. Real MessageID: <f89a5055-25b8-1316-c644-32efd6cf93c3@gmail.com>`. Email terkirim nyata ke akun Gmail founder.
+- **Verification:** Uji kirim langsung sukses: `[SMTP Live] Email dispatched to faturachmanalkahfi7@gmail.com. Real MessageID: <f89a5055-25b8-1316-c644-32efd6cf93c3@gmail.com>`. Email terkirim nyata ke akun Gmail founder.
 - **Notes:** Safety sandbox tetap melindungi kontak eksternal (default staging mock tetap aktif kecuali tombol live diklik).
 
 ## [2026-09-21 00:42 UTC] Program: UI/UX Refinement & GitHub Bounty Readiness
@@ -2800,7 +2800,7 @@ _Log kerja otonom Colony Builder. Semua perubahan kode WAJIB dicatat di sini._
 - **Task:** Telegram delivery + Safety guardrails + Cron message hardening
 - **File:** AGENTS.md, cron jobs (edit)
 - **Changes:**
-  - Cron jobs: `--announce --to <FOUNDER_TELEGRAM_ID> --best-effort-deliver` â†’ hasil dikirim ke Telegram founder
+  - Cron jobs: `--announce --to 8148465559 --best-effort-deliver` â†’ hasil dikirim ke Telegram founder
   - AGENTS.md: tambah Safety Guardrails (10 rules), Red Lines (12 items)
   - Cron messages: lebih ketat (max 20 baris perubahan, wajib tsc, wajib log, STOP jika tidak yakin)
 - **Status:** success
@@ -4767,6 +4767,8 @@ _Log kerja otonom Colony Builder. Semua perubahan kode WAJIB dicatat di sini._
 - **File:** None (verification only)
 - **Changes:** None
 - **Status:** success (maintenance)
+- **MRP Summary:** Layer 1 re-read (.mimo-context.md, AGENTS.md, colony-autonomous-log.md â€” terakhir 08:02 documentation sync). Layer 3 skipped (same day, already read 08:02). Status: 2
+... [truncated for diff preview]
 - **MRP Summary:** Layer 1 re-read (.mimo-context.md, AGENTS.md, colony-autonomous-log.md â€” terakhir 08:02 documentation sync). Layer 3 skipped (same day, already read 08:02). Status: 23/23 colony files hardened, 44 decisions locked, T-001~T-034 all Done, Phase 1-5 complete, cognitive 10/10 ALL PASS, all 90-day deliverables DONE. Backlog says "no new payment/SaaS build until manual outreach responses exist."
 - **Verification:** `tsc --noEmit` = 0 error PASS | `npm run ops:health` PASS 3/3 | `test:command-engine` 16/0 PASS | `test:chat-engine` 19/0 PASS | `commercial-status-test` 9/0 PASS | `verify-public-routes` 29/0 PASS
 - **Notes:** Senin 10:02 â€” colony engine stable, zero regression across all 6 test suites checked. Phase 5 complete since 07:18 this morning. No new coding work started â€” next action is founder manually sending 3 demos (Mas Dikun, Custom Style, Cleanforyou) per `ops/revenue/DEMO_AND_FOLLOWUP_TODAY.md`.
@@ -5470,7 +5472,7 @@ ode scripts/autonomous-revenue-agent-v1.mjs --offline PASS; pencarian placeholde
 - **File:** scripts/jagat-ops-monitor.mjs; scripts/install-jagat-ops-monitor.ps1; ops/RUNTIME_RUNBOOK.md; ops/colony-autonomous-log.md; ops/colony-handoff.md; .mimo-context.md.
 - **Changes:** Watchdog memeriksa empat probe lokal dan status PM2 bot, menyimpan status di LOCALAPPDATA, mengirim Telegram hanya saat status berubah atau heartbeat 6 jam, serta memakai retry cooldown 30 menit. Scheduled Task JAGAT Ops Health Watchdog terpasang dengan interval 15 menit. Runbook menjelaskan instalasi dan pelepasan task.
 - **Status:** partial
-- **Verification:** nnode --check PASS; dry run tanpa Telegram melaporkan BFF status 503, UI healthy, auth gate healthy, Qdrant unreachable, Telegram PM2 online, TELEGRAM_SENT=false. Scheduled Task aktif, LastTaskResult=0 pada run 11:33:59. State mencatat fingerprint notifikasi sukses; konfigurasi penerima cocok dengan founder chat ID <FOUNDER_TELEGRAM_ID> tanpa menampilkan token. Tidak ada email/provider call atau service restart.
+- **Verification:** nnode --check PASS; dry run tanpa Telegram melaporkan BFF status 503, UI healthy, auth gate healthy, Qdrant unreachable, Telegram PM2 online, TELEGRAM_SENT=false. Scheduled Task aktif, LastTaskResult=0 pada run 11:33:59. State mencatat fingerprint notifikasi sukses; konfigurasi penerima cocok dengan founder chat ID 8148465559 tanpa menampilkan token. Tidak ada email/provider call atau service restart.
 - **Notes:** Watchdog berhasil memberi ringkasan health Telegram, namun BFF masih 503 dan Qdrant unreachable. Otomasi revenue masih terjadwal; C6 development loop belum terbukti operasional end-to-end. Arbitrary command execution pada Telegram model handler tidak diubah dan perlu review boundary sebelum worker coding dijalankan.
 ### Watchdog detail update - 2026-11-05 11:38 PST
 - Backend health payload now contributes Redis/Qdrant/Ollama dependency states to the Telegram fingerprint. Live read-only output: Redis healthy, Ollama healthy, Qdrant unreachable, BFF status 503, UI/auth healthy, Telegram PM2 online.
@@ -5777,7 +5779,8 @@ um_predict=768 selesai 89.237 ms (HTTP 200, 768 token); uji 128 token sebelumnya
 - **File:** ops/colony-autonomous-log.md; ops/colony-handoff.md; .mimo-context.md.
 - **Changes:** Tidak ada perubahan kode atau runtime; merekam bukti konfigurasi dan batas operasional saat ini.
 - **Status:** partial
-- **Verification:** Task JAGAT Autonomous Revenue Agent V1 aktif; LastRun 13:41:40 PST/result 0, next 16:41:39. Action menjalankan un-autonomous-revenue-cycle-v1.ps1: discovery, brief Telegram, draft Telegram, lalu process-approved-outreach.mjs. Sender membatasi 1 attempt/cycle dan 5/day, memvalidasi founder identity, approval expiry, current recipient/hash match, dan duplicate ledger. Saat audit: 0 approval file, 5 draft, tracker 134 lines, send ledger 65 entries; tidak ada email baru.
+- **Verification:** Task JAGAT Autonomous Revenue Agent V1 aktif; LastRun 13:41:40 PST/result 0, next 16:41:39. Action menjalankan 
+un-autonomous-revenue-cycle-v1.ps1: discovery, brief Telegram, draft Telegram, lalu process-approved-outreach.mjs. Sender membatasi 1 attempt/cycle dan 5/day, memvalidasi founder identity, approval expiry, current recipient/hash match, dan duplicate ledger. Saat audit: 0 approval file, 5 draft, tracker 134 lines, send ledger 65 entries; tidak ada email baru.
 - **Notes:** Telegram sudah menerima brief dan batch draft; status revenue/prospek/outreach tersedia di source namun PM2 harus runtime-verified setelah maintenance. Approval saat ini melalui CLI lokal; Telegram tidak memiliki kontrol approve. Tidak menjalankan siklus manual atau outbound.
 
 ## [2026-11-05 13:56 PST] Program: JAGAT Runtime Health Verification
@@ -5824,7 +5827,8 @@ ode --check scripts/email-outreach-draft-agent-v1.mjs PASS. Tiga behavioral chec
 - **Task:** Telusuri dan verifikasi jalur notifikasi Telegram untuk hasil email approval-only.
 - **MRP Summary:** Saya membaca MRP dan dokumen arsitektur/backlog/risiko. Saya memahami D-043 mewajibkan approval exact recipient/hash dan tidak membolehkan bulk send; fokus audit membuktikan pemantauan hasil send tanpa mengubah gate atau melakukan email nyata.
 - **File:** ops/colony-autonomous-log.md; ops/colony-handoff.md; .mimo-context.md.
-- **Changes:** Tidak ada perubahan kode. Koreksi asumsi sebelumnya: process-approved-outreach.mjs memanggil evenue-outreach-email.mjs, yang mengirim sent/failed/unknown lewat 
+- **Changes:** Tidak ada perubahan kode. Koreksi asumsi sebelumnya: process-approved-outreach.mjs memanggil 
+evenue-outreach-email.mjs, yang mengirim sent/failed/unknown lewat 
 otifyFounderOutcome() ke Telegram founder.
 - **Status:** success
 - **Verification:** 
@@ -5896,9 +5900,11 @@ npm run test:revenue-outreach-sender PASS pada isolated temp workspace: fake ada
 
 ## [2026-11-05 14:16 -08:00] Program: Revenue Workflow Hardening
 - **Task:** Prevent draft generation from selecting prospects explicitly marked as rejected or whose recorded response contains a clear refusal/opt-out.
-- **MRP Summary:** MRP lengkap dibaca. D-043/Commercial Readiness require no re-contact after refusal; ops instructions identify ejected, and draft selector previously did not inspect rejection statuses or response text.
+- **MRP Summary:** MRP lengkap dibaca. D-043/Commercial Readiness require no re-contact after refusal; ops instructions identify 
+ejected, and draft selector previously did not inspect rejection statuses or response text.
 - **File:** scripts/email-outreach-draft-agent-v1.mjs; ops/colony-autonomous-log.md; ops/colony-handoff.md; .mimo-context.md
-- **Changes:** Draft eligibility now excludes rejected, declined, do-not-contact, opted-out, closed-lost, and not-interested statuses plus explicit English/Indonesian refusal phrases in esponse.
+- **Changes:** Draft eligibility now excludes rejected, declined, do-not-contact, opted-out, closed-lost, and not-interested statuses plus explicit English/Indonesian refusal phrases in 
+esponse.
 - **Status:** success
 - **Verification:** 
 node --check PASS; extracted actual eligibility function behavior PASS for six refusal statuses, six explicit refusal phrases, and a normal eligible lead. No tracker mutation, crawler, approval, email, or Telegram send.
@@ -6377,3 +6383,46 @@ ode scripts/worker-sandbox-test.mjs PASS 48/0, covering allowed roots, path trav
 - **Status:** success
 - **Verification:** `JAGAT_REVENUE_CYCLE=PASS`; discovery added 1 lead; brief and draft batch delivered to Telegram; SMTP verified and returned success for exactly one eligible business mailbox. Send ledger contains paired `attempted`/`sent` events under `founder_campaign_policy`. `ops:revenue-status` reports fresh artifacts, delivered notifications, and newest send event; historic failures keep outreach health at ATTENTION. Scheduled task remains Ready, next run 10:41:39 PST; the rolling 24-hour cap will prevent another auto-send.
 - **Notes:** No real email was sent during tests; this single SMTP delivery was the explicitly authorized live cycle. The runner did not modify `.env` or service ports. Inbound STOP replies still require manual suppression entry.
+## [2026-11-11 07:01 -08:00] Program: Clean Public GitHub Export (DOTS Inspection)
+- **Task:** Upload sanitized JAGAT G7 system codebase, UI, scripts, and architecture docs to a public GitHub repository per Founder request so DOTS can inspect and align architecture.
+- **Files:** `ops/colony-autonomous-log.md` (logged only; live workspace `.env`, `jagat-ui/.git`, PM2, and runtime files left untouched).
+- **Changes:** Built sanitized staging export (313 files, 3.70 MB) excluding `.env`, `.env.local`, hardcoded SMTP scratch (`scratch_email.cjs`), `wa-auth-state/`, `.openclaw/`, `ops/revenue/`, `workspace/`, `qdrant_data/`, `snapshots/`, backup scripts, and large archives. Added `README.md` architecture overview and pushed to public GitHub repository `https://github.com/Vinzz2303/jagat-g7` (`main` branch).
+- **Status:** success
+- **Verification:** Staging secret audit passed with 0 issues; `git push` succeeded to `Vinzz2303/jagat-g7`; unauthenticated HTTP check confirmed `200 OK` on web and GitHub API (`private: false`, `default_branch: main`); verified root files and full `jagat-ui/src` presence on GitHub.
+- **Notes:** `.env`, credentials, and prospect PII were never staged or pushed. Live runtime services in `c:\JAGAT` were untouched.
+## [2026-11-11 19:37 -08:00] Program: Error & SMTP Diagnostic Bundle Zip Upload
+- **Task:** Menggabungkan seluruh log error JAGAT (SMTP outreach ledger, revenue scheduler, PM2 bot/swarm/UI, BFF/Qdrant runtime, dan laporan diagnosa) menjadi 1 file `.zip` tersanitasi dan meng-upload langsung ke repository GitHub publik `Vinzz2303/jagat-g7`.
+- **Files:** `ops/colony-autonomous-log.md` (catatan eksekusi; file live `.env` dan runtime tidak diubah).
+- **Changes:** Mengemas 31 file (seluruh log SMTP/outreach, PM2, runtime server, hasil uji SMTP live + preview D-052, 4 skrip SMTP terkait, dan laporan diagnosa) ke `diagnostics/jagat-error-logs-2026-11-11.zip` (39.176 bytes) dan `diagnostics/ERROR_DIAGNOSTIC_REPORT.md` dengan sanitasi ID Telegram, email pribadi, dan ref Postgres Supabase, lalu upload ke branch `main` `Vinzz2303/jagat-g7`.
+- **Status:** success
+- **Verification:** Secret audit passed (0 leaks); unauthenticated HTTP `GET` ke `https://github.com/Vinzz2303/jagat-g7/raw/main/diagnostics/jagat-error-logs-2026-11-11.zip` mengembalikan HTTP `200` dengan ukuran persis `39176` bytes.
+- **Notes:** Link siap dibagikan langsung ke Founder dan DOTS.
+## [2026-11-11 23:28 -08:00] Program: DOTS Branch Integration + Windows/IndonesiaYP Fixes (Option C)
+- **Task:** Mengaudit, menguji di salinan terisolasi, memperbaiki dua bug platform/markup nyata, menerapkan branch DOTS (`fix/revenue-pipeline-reliability-2026-11-12` commit `9bdb23de`), dan memuat ulang PM2 `jagat-telegram-bots` atas persetujuan Founder.
+- **Files:** 20 file dari branch `fix/revenue-pipeline-reliability-2026-11-12` + penyesuaian lokal di `scripts/prospect-discovery-agent-v1.mjs`, `scripts/revenue-provenance-test.mjs`, `scripts/revenue-notification-test.mjs`, serta `ops/colony-autonomous-log.md`.
+- **Backups:** `c:\JAGAT\snapshots\pre_dots_revenue_repair_backup`
+- **Changes:**
+  - Menerapkan perbaikan provenance D-052 (`outreach-campaign-guard.mjs`), isolasi kegagalan notifikasi Telegram opsional (`revenue-notification.mjs`, `telegram-event-guard.mjs`), penggantian model Groq `llama3-8b-8192` → `llama-3.1-8b-instant`, timeout 30s, strict JSON `model-response.ts`, serta `format: "json"` Ollama.
+  - Memperbaiki `extractWebsite()` di `scripts/prospect-discovery-agent-v1.mjs` agar mendukung label asli `Website address` (`Website(?:\s+address)?`) pada halaman `indonesiayp.com` sekaligus tetap menolak link `/redir/` sponsor.
+  - Memperbaiki `--import` preload path pada `revenue-provenance-test.mjs` dan `revenue-notification-test.mjs` memakai `pathToFileURL(preload).href` agar lolos di Node.js Windows.
+  - Memuat ulang PM2 `jagat-telegram-bots` tanpa mengubah `.env`, `AUTO_SEND_POLICY.json`, atau data tracker.
+- **Status:** success
+- **Verification:**
+  - `npm run typecheck` (`tsc --noEmit`) = 0 errors ✅
+  - `npm run build` (`tsc`) = PASS ✅
+  - `npm run test:revenue-offline` = ALL PASS (`test:revenue-provenance` 50 assertions, `test:revenue-notifications` 31 assertions, `test:revenue-status` 25 checks, `test:revenue-outreach-sender` fake SMTP PASS, `test:model-provider-json` 14/14 PASS) ✅
+  - PM2 `jagat-telegram-bots` reload + online check = ONLINE ✅
+- **Notes:** Tidak ada email sungguhan yang dikirim saat pengujian. Perubahan lokal ini belum di-push balik ke GitHub (branch `main` / branch DOTS); siap jika Founder ingin sinkronisasi ke GitHub.
+## [2026-11-11 23:35 -08:00] Program: Sync & SHA-256 Parity Verification vs Commit ab36126
+- **Task:** Membandingkan 3 file koreksi dengan commit DOTS `ab36126a3849e989252e197b993d7d2ea0ef548b`, menyinkronkan ke versi `ab36126` (67 provenance assertions + guard `>\s*`), memverifikasi seluruh 21 file via SHA-256, mencatat jadwal siklus Windows Task Scheduler, dan mempublikasikan laporan bukti ke GitHub untuk DOTS.
+- **Files:** `scripts/prospect-discovery-agent-v1.mjs`, `scripts/revenue-provenance-test.mjs`, `scripts/revenue-notification-test.mjs`, `ops/REVENUE_REPAIR_RDP_CORRECTIONS_2026-11-12.md`, `ops/colony-autonomous-log.md`.
+- **Status:** success
+- **Verification:**
+  - SHA-256 check 21/21 file vs `ab36126` = `EXACT_MATCH` (0 mismatches) ✅
+  - `npm run typecheck` = PASS, `npm run build` = PASS ✅
+  - `npm run test:revenue-offline` = ALL PASS (`test:revenue-provenance` **67 assertions**, `test:revenue-notifications` **31 assertions**, `test:revenue-status` **25 checks**, `test:revenue-outreach-sender` fake SMTP PASS, `test:model-provider-json` **14/14 PASS**) ✅
+  - Windows Task `JAGAT Autonomous Revenue Agent V1`: `LastRunTime: 2026-11-11 22:41:40` (`LastTaskResult: 0`), `NextRunTime: 2026-11-12 01:41:39` (siklus live tidak dipicu manual) ✅
+  - Bukti verifikasi publik: `https://github.com/Vinzz2303/jagat-g7/blob/main/diagnostics/RDP_VERIFICATION_EVIDENCE_2026-11-12.md` (`HTTP 200`).
+
+
+

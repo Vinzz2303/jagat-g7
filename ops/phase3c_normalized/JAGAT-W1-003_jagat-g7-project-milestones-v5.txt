@@ -1,0 +1,61 @@
+---
+id: JAGAT-W1-003
+title: JAGAT G7 Project Milestones V5
+source: jagat-g7-project-milestones-v5
+category: milestone
+doc_type: xlsx
+owner: Faturachman Al Kahfi
+created_at: 2026-05-20
+trust_level: founder_verified
+provenance: local file from founder workstation Downloads folder
+sha256: AC35564E96D5EFAAAB852BBF2D3F35660461544E8E3385F09F0EC87BB337E5FC
+notes: Milestone tracking reference for delivery progress and project status.
+---
+
+## Sheet: Ringkasan & Dashboard
+
+JAGAT G7 (GARUDA 7) — PROJECT MILESTONE DASHBOARD
+TOTAL AKTIVITAS | DISELESAIKAN | SEDANG BERJALAN | DIRENCANAKAN | PERSENTASE SELESAI
+0 | 0 | 0 | 0 | 0
+PROGRES BERDASARKAN FASE PROJEK
+Fase Sistem | Total Milestone | Selesai | Berjalan | Rencana | Progres (%) | Selesai | 0
+Fase 1: Fondasi | 0 | 0 | 0 | 0 | 0 | Berjalan | 0
+Fase 2: Sintesis | 0 | 0 | 0 | 0 | 0 | Rencana | 0
+Fase 3: Ingesti Data | 0 | 0 | 0 | 0 | 0
+Fase 4: Agen Hilir | 0 | 0 | 0 | 0 | 0
+Fase 5: Komersial | 0 | 0 | 0 | 0 | 0
+TOTAL KESELURUHAN | 0 | 0 | 0 | 0 | 0
+
+## Sheet: Matriks Milestone
+
+ID Milestone | Fase Projek | Nama Aktivitas / Milestone | Target Timeline | Status | Prioritas | Catatan Teknis / Ruang Lingkup
+G7-01 | Fase 1: Fondasi | Provisioning Server Bare-Metal Physical AMD Ryzen | Q1-Q2 2026 | ✅ SELESAI | Tinggi | Dedicated hardware setup murni untuk kedaulatan data fisik.
+G7-02 | Fase 1: Fondasi | Konfigurasi OS Windows Server & Alokasi Memori 32GB | Q1-Q2 2026 | ✅ SELESAI | Tinggi | Setup baseline OS platform untuk hosting native runtime.
+G7-03 | Fase 1: Fondasi | Setup Environment Node.js v26.1.0 ESM-Native | Q1-Q2 2026 | ✅ SELESAI | Tinggi | Penyediaan core runtime modern pendukung top-level await.
+G7-04 | Fase 1: Fondasi | Inisialisasi Express.js BFF Engine (Port 5000) | Q1-Q2 2026 | ✅ SELESAI | Tinggi | Membangun Backend-For-Frontend pelindung arsitektur internal.
+G7-05 | Fase 1: Fondasi | Deployment Next.js v16.2.6 UI Production (Port 50012) | Q1-Q2 2026 | ✅ SELESAI | Tinggi | Kompilasi bersih 13 halaman statis & dinamis teroptimasi Turbopack.
+G7-06 | Fase 1: Fondasi | Deployment Redis Native Portable (.exe) (Port 6379) | Q1-Q2 2026 | ✅ SELESAI | Tinggi | Penyimpanan cache sesi chat aktif dengan snapshot dump.rdb.
+G7-07 | Fase 1: Fondasi | Deployment Qdrant Vector DB v1.18.0 Native (Port 6333) | Q1-Q2 2026 | ✅ SELESAI | Tinggi | Database memori jangka panjang dengan konfigurasi 11 parallel workers.
+G7-08 | Fase 1: Fondasi | Integrasi Ollama Local Engine & Model Llama 3 | Q1-Q2 2026 | ✅ SELESAI | Tinggi | Base cognitive worker murni lokal untuk inferensi tanpa kebocoran.
+G7-09 | Fase 1: Fondasi | Inisialisasi Koleksi Vektor 'jagat_indonesia_knowledge' | Q1-Q2 2026 | ✅ SELESAI | Sedang | Klaster matriks 768-dimensi berjarak Cosine Similarity.
+G7-10 | Fase 1: Fondasi | Konfigurasi Inbound Rules Windows Firewall Publik | Q1-Q2 2026 | ✅ SELESAI | Tinggi | Membuka port 50012 dan 5000 untuk akses IP baru 103.190.0.113.
+G7-11 | Fase 1: Fondasi | Penerapan Status Guard Fix pada ioredis Singleton | Q1-Q2 2026 | ✅ SELESAI | Tinggi | Hot-patch redis.service.ts mendeteksi status 'wait'/'end'.
+G7-12 | Fase 1: Fondasi | Bypass Konflik Undici Qdrant Client via Native Fetch | Q1-Q2 2026 | ✅ SELESAI | Tinggi | Modifikasi qdrant.service.ts menggunakan globalThis.fetch Node 26.
+G7-13 | Fase 2: Sintesis | Cognitive Profiling 7 Apex Minds Global | Q2 2026 | 🔄 BERJALAN | Tinggi | Analisis struktur penalaran Claude, GPT, Gemini, Groq, Mistral, dll.
+G7-14 | Fase 2: Sintesis | Engineering Master System Prompt Berlapis (Garuda 7) | Q2 2026 | 🔄 BERJALAN | Tinggi | Penyusunan blueprint instruksi penggabungan 7 pikiran ke 1 otak.
+G7-15 | Fase 2: Sintesis | Pengembangan Suite Pengujian & Benchmark Kognitif Internal | Q2 2026 | 📋 RENCANA | Sedang | Mengukur kedalaman penalaran replikasi model referensi.
+G7-16 | Fase 2: Sintesis | Implementasi Adaptive Prompt Router Engine | Q2 2026 | 📋 RENCANA | Tinggi | Router otonom penentu gaya prompt berdasarkan intent user.
+G7-17 | Fase 3: Ingesti Data | Kurasi & Digitalisasi Korpus Dokumen Strategis | Q3 2026 | 📋 RENCANA | Tinggi | Target pengumpulan dokumen regulasi dan pengetahuan Indonesia.
+G7-18 | Fase 3: Ingesti Data | Implementasi Semantic Boundaries Chunking Strategy | Q3 2026 | 📋 RENCANA | Sedang | Segmentasi teks cerdas dengan max 512 token dan 15% overlap.
+G7-19 | Fase 3: Ingesti Data | Otomasi Pipeline Embedding Massal via Ollama | Q3 2026 | 📋 RENCANA | Tinggi | Script background workers pengolah 100+ dokumen per menit.
+G7-20 | Fase 3: Ingesti Data | Tuning Mekanisme Hybrid Search (Dense + Sparse) | Q3 2026 | 📋 RENCANA | Tinggi | Kombinasi kedekatan vektor Qdrant dengan pencarian kata kunci BM25.
+G7-21 | Fase 3: Ingesti Data | Optimasi Relevansi Context Window & Top-K Chunks | Q3 2026 | 📋 RENCANA | Sedang | Batas ukur threshold similarity 0.72 dan limitasi Top-K: 5.
+G7-22 | Fase 3: Ingesti Data | Integrasi Format Citation & Provenance Manajemen | Q3 2026 | 📋 RENCANA | Tinggi | Menampilkan source attribution terverifikasi pada response UI.
+G7-23 | Fase 4: Agen Hilir | Deployment Agen Kiting AI (Universal Assistant Layer) | Q4 2026 | 📋 RENCANA | Tinggi | Asisten produktivitas serbaguna berbasis sasis berdaulat.
+G7-24 | Fase 4: Agen Hilir | Fine-Tuning Prompt Layer Kiting AI Coding/Creative | Q4 2026 | 📋 RENCANA | Sedang | Optimalisasi nalar bahasa luwes untuk eksekusi tugas harian.
+G7-25 | Fase 4: Agen Hilir | Deployment Agen Ting AI (Financial Risk Copilot) | Q4 2026 | 📋 RENCANA | Tinggi | Intelijen keuangan terstruktur untuk literasi risiko investor ritel.
+G7-26 | Fase 4: Agen Hilir | Ingesti Financial Knowledge Base (OJK, BI, IDX) | Q4 2026 | 📋 RENCANA | Tinggi | Penyuntikan memori khusus regulasi pasar modal Indonesia ke Qdrant.
+G7-27 | Fase 4: Agen Hilir | Arsitektur Orkestrasi Multi-Agent Gateway | Q4 2026 | 📋 RENCANA | Sedang | Gerbang pemisah tugas otomatis antara Kiting AI dan Ting AI.
+G7-28 | Fase 5: Komersial | Setup Token Registry System di Supabase PG | 2027 | 📋 RENCANA | Tinggi | Sinkronisasi table jagat_tokens via Supabase Pooler port 6543.
+G7-29 | Fase 5: Komersial | Desain Tingkatan Langganan & Usage Metering | 2027 | 📋 RENCANA | Sedang | Sistem kuota tiers (Free, Pro, Enterprise) berbasis Redis counters.
+G7-30 | Fase 5: Komersial | Integrasi Payment Gateway Midtrans Snap API | 2027 | 📋 RENCANA | Tinggi | Gerbang pembayaran perorangan bypass verifikasi legalitas PT.

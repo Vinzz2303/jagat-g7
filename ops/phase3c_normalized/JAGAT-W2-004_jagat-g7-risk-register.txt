@@ -1,0 +1,33 @@
+---
+id: JAGAT-W2-004
+title: JAGAT G7 Risk Register
+source: jagat-g7-risk-register
+category: risk
+doc_type: md
+owner: Faturachman Al Kahfi
+created_at: 2026-05-20
+trust_level: founder_verified
+provenance: ops folder — risk tracking with severity, probability, mitigation, and owner
+sha256: 9C5B7DF5126BFBCEC8AA4C80E50BD38BA95A28F1C861BC297DC23C6ECD165F1C
+notes: 8 risks (R-001 to R-008) including identity drift, prompt leakage, Qdrant pollution, and scope creep.
+---
+
+# JAGAT G7 Risk Register
+
+| ID | Risiko | Severity | Probabilitas | Dampak | Mitigasi | Owner | Status |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| R-001 | Identity drift: model mengaku Codex/ChatGPT/OpenAI atau salah pencipta. | Critical | Medium | Merusak identitas dan kepercayaan founder. | Identity fast-path, system prompt, `benchmark:identity`, `test:creator`. | AI Builder | Mitigated |
+| R-002 | Prompt leakage: UI menampilkan instruksi internal, threshold, atau rahasia dapur. | Critical | Medium | Membocorkan strategi dan membuat produk terlihat generik. | Cognitive prompt ringkas, no-leak benchmark, filter response. | AI Builder | Mitigated |
+| R-003 | Qdrant pollution: output model masuk ke memori sebagai knowledge. | Critical | High | Memori rusak, kesalahan lama berulang. | Auto-ingest dimatikan; source feedback-loop ditolak; benchmark Phase 2C. | AI Builder | Mitigated |
+| R-004 | Ingest tanpa metadata/provenance. | High | High | Memori tidak bisa diaudit dan citation lemah. | Phase 3 wajib schema metadata dan provenance. | Saint + AI Builder | Active |
+| R-005 | Latency tinggi pada CPU/local model. | Medium | High | UX lambat, terutama query non-fast-path. | Benchmark latency, model routing, GPU roadmap. | AI Builder + Faturachman | Open |
+| R-006 | Port/service mati setelah restart server. | High | Medium | UI/backend tidak bisa dipakai. | Autoboot script, health check, runbook infra. | AI Builder + Faturachman | Open |
+| R-007 | Scope creep sebelum memory layer matang. | High | Medium | Proyek jadi acak dan tidak selesai. | Masterplan, backlog gate, weekly execution loop. | Faturachman + AI Builder | Active |
+| R-008 | UI terlalu teknis untuk klien/presentasi. | Medium | Medium | Produk sulit dipahami calon pengguna. | Login front page dipoles menjadi demo produk animatif; perlu review visual lanjutan saat Phase 3 UI metadata/citation dibuat. | Saint + AI Builder | Mitigated |
+
+## Severity
+
+- Critical: merusak identitas, memori, keamanan, atau operasional inti.
+- High: menghambat fase utama atau mengganggu demo serius.
+- Medium: mengurangi kualitas UX, stabilitas, atau efisiensi.
+- Low: polish minor.

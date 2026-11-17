@@ -1,0 +1,20 @@
+{
+  "id": "JAGAT-W3-001",
+  "status": "curated",
+  "title": "JAGAT G7 Agent Boundary Design — Phase 4",
+  "source": "jagat-g7-agent-boundary-design",
+  "category": "product",
+  "doc_type": "md",
+  "owner": "Faturachman Al Kahfi",
+  "created_at": "2026-06-06",
+  "trust_level": "founder_verified",
+  "provenance": "ops folder — Phase 4 agent boundary specifications for Kiting AI, Ting AI, and G7 Motherbox",
+  "notes": "Defines persona, memory scope, allowed/disallowed tools, refusal policy, routing matrix, escalation path, and acceptance criteria for downstream agents.",
+  "local_path": "C:\\JAGAT\\ops\\AGENT_BOUNDARY_DESIGN.md",
+  "sha256": "3EE7BB3D4FA5658F03ED858D0D99AAEF46E76FF211E09E806B54C421B3C34318",
+  "size_bytes": 10546,
+  "extraction": {
+    "status": "normalized",
+    "doc_type": "md"
+  }
+}

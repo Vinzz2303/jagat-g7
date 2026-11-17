@@ -1,0 +1,164 @@
+{
+  "phase": "3F",
+  "generated_at": "2026-05-24T17:33:51.037Z",
+  "status": "passed",
+  "cases": [
+    {
+      "name": "Hybrid retrieval umum",
+      "topic": "Qdrant Redis BFF Express.js",
+      "filters": null,
+      "contextDocumentsUsed": 5,
+      "retrievalMode": "hybrid",
+      "contextSources": [
+        {
+          "title": "JAGAT G7 Technical Blueprint",
+          "source": "jagat-g7-technical-blueprint",
+          "category": "blueprint",
+          "score": 0.73333792,
+          "denseScore": 0.629636,
+          "sparseScore": 1,
+          "chunkIndex": 7,
+          "sectionTitle": "3. DEEP-DIVE: LAPISAN ORKESTRASI BFF (BACKEND-FOR-",
+          "retrievalMode": "hybrid",
+          "matchedKeywords": [
+            "qdrant",
+            "redis",
+            "bff",
+            "express"
+          ]
+        },
+        {
+          "title": "JAGAT G7 Project Milestones V5",
+          "source": "jagat-g7-project-milestones-v5",
+          "category": "milestone",
+          "score": 0.71920586,
+          "denseScore": 0.71920586,
+          "sparseScore": 0.56,
+          "chunkIndex": 4,
+          "sectionTitle": "G7-04 | Fase 1: Fondasi | Inisialisasi Express.js BFF Engine (Port 5000) | Q1-Q2 2026 | ✅ SELESAI | Tinggi | Membangun Backend-For-Frontend pelindung arsitektur internal.",
+          "retrievalMode": "hybrid",
+          "matchedKeywords": [
+            "bff",
+            "express"
+          ]
+        },
+        {
+          "title": "JAGAT G7 Project Milestones V5",
+          "source": "jagat-g7-project-milestones-v5",
+          "category": "milestone",
+          "score": 0.71614146,
+          "denseScore": 0.71614146,
+          "sparseScore": 0,
+          "chunkIndex": 3,
+          "sectionTitle": "G7-03 | Fase 1: Fondasi | Setup Environment Node.js v26.1.0 ESM-Native | Q1-Q2 2026 | ✅ SELESAI | Tinggi | Penyediaan core runtime modern pendukung top-level await.",
+          "retrievalMode": "dense",
+          "matchedKeywords": []
+        },
+        {
+          "title": "JAGAT G7 Technical Backlog",
+          "source": "jagat-g7-technical-backlog",
+          "category": "infrastructure",
+          "score": 0.70602417,
+          "denseScore": 0.70602417,
+          "sparseScore": 0,
+          "chunkIndex": 0,
+          "sectionTitle": "JAGAT G7 Technical Backlog / | ID | Phase | Task | Owner | Risiko | Acceptance Criteria | Status |",
+          "retrievalMode": "dense",
+          "matchedKeywords": []
+        },
+        {
+          "title": "JAGAT G7 Product Backlog",
+          "source": "jagat-g7-product-backlog",
+          "category": "product",
+          "score": 0.70602417,
+          "denseScore": 0.70602417,
+          "sparseScore": 0,
+          "chunkIndex": 0,
+          "sectionTitle": "JAGAT G7 Product Backlog / | ID | Phase | Task | Owner | Risiko | Acceptance Criteria | Status |",
+          "retrievalMode": "dense",
+          "matchedKeywords": []
+        }
+      ]
+    },
+    {
+      "name": "Filter category milestone",
+      "topic": "Engineering Master System Prompt Berlapis Garuda 7",
+      "filters": {
+        "category": "milestone"
+      },
+      "contextDocumentsUsed": 5,
+      "retrievalMode": "hybrid",
+      "contextSources": [
+        {
+          "title": "JAGAT G7 Project Milestones V5",
+          "source": "jagat-g7-project-milestones-v5",
+          "category": "milestone",
+          "score": 0.82029164,
+          "denseScore": 0.82029164,
+          "sparseScore": 0.16666666666666666,
+          "chunkIndex": 0,
+          "sectionTitle": "Sheet: Ringkasan & Dashboard",
+          "retrievalMode": "hybrid",
+          "matchedKeywords": [
+            "garuda"
+          ]
+        },
+        {
+          "title": "JAGAT G7 Project Milestones V5",
+          "source": "jagat-g7-project-milestones-v5",
+          "category": "milestone",
+          "score": 0.811946332,
+          "denseScore": 0.73881435,
+          "sparseScore": 1,
+          "chunkIndex": 14,
+          "sectionTitle": "G7-14 | Fase 2: Sintesis | Engineering Master System Prompt Berlapis (Garuda 7) | Q2 2026 | 🔄 BERJALAN | Tinggi | Penyusunan blueprint instruksi penggabungan 7 pikiran ke 1 otak.",
+          "retrievalMode": "hybrid",
+          "matchedKeywords": [
+            "engineering",
+            "master",
+            "system",
+            "prompt",
+            "berlapis",
+            "garuda"
+          ]
+        },
+        {
+          "title": "JAGAT G7 Project Milestones V5",
+          "source": "jagat-g7-project-milestones-v5",
+          "category": "milestone",
+          "score": 0.6814167,
+          "denseScore": 0.6814167,
+          "sparseScore": 0,
+          "chunkIndex": 13,
+          "sectionTitle": "G7-13 | Fase 2: Sintesis | Cognitive Profiling 7 Apex Minds Global | Q2 2026 | 🔄 BERJALAN | Tinggi | Analisis struktur penalaran Claude, GPT, Gemini, Groq, Mistral, dll.",
+          "retrievalMode": "dense",
+          "matchedKeywords": []
+        },
+        {
+          "title": "JAGAT G7 Project Milestones V5",
+          "source": "jagat-g7-project-milestones-v5",
+          "category": "milestone",
+          "score": 0.66084945,
+          "denseScore": 0.66084945,
+          "sparseScore": 0,
+          "chunkIndex": 7,
+          "sectionTitle": "G7-07 | Fase 1: Fondasi | Deployment Qdrant Vector DB v1.18.0 Native (Port 6333) | Q1-Q2 2026 | ✅ SELESAI | Tinggi | Database memori jangka panjang dengan konfigurasi 11 parallel workers.",
+          "retrievalMode": "dense",
+          "matchedKeywords": []
+        },
+        {
+          "title": "JAGAT G7 Project Milestones V5",
+          "source": "jagat-g7-project-milestones-v5",
+          "category": "milestone",
+          "score": 0.6450132,
+          "denseScore": 0.6450132,
+          "sparseScore": 0,
+          "chunkIndex": 29,
+          "sectionTitle": "G7-29 | Fase 5: Komersial | Desain Tingkatan Langganan & Usage Metering | 2027 | 📋 RENCANA | Sedang | Sistem kuota tiers (Free, Pro, Enterprise) berbasis Redis counters.",
+          "retrievalMode": "dense",
+          "matchedKeywords": []
+        }
+      ]
+    }
+  ]
+}

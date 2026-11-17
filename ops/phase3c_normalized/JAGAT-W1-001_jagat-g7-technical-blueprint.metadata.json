@@ -1,0 +1,23 @@
+{
+  "id": "JAGAT-W1-001",
+  "status": "curated",
+  "title": "JAGAT G7 Technical Blueprint",
+  "source": "jagat-g7-technical-blueprint",
+  "category": "blueprint",
+  "doc_type": "pdf",
+  "owner": "Faturachman Al Kahfi",
+  "created_at": "2026-05-20",
+  "trust_level": "founder_verified",
+  "provenance": "local file from founder workstation Downloads folder",
+  "notes": "Core technical architecture reference for Phase 3 memory ingestion.",
+  "local_path": "C:\\Users\\Administrator\\Downloads\\JAGAT_G7_Technical_Blueprint.pdf",
+  "sha256": "A64FD879DE116A376D03D84DE595CDA6E13240D4434F71080A2C32F7C8B6040E",
+  "size_bytes": 91670,
+  "extraction": {
+    "page_count": 13,
+    "text_extraction_chars": 17745,
+    "ocr_used": false,
+    "chars_per_page": 1365,
+    "status": "normalized"
+  }
+}

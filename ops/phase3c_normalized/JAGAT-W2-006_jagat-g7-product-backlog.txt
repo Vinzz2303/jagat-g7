@@ -1,0 +1,48 @@
+---
+id: JAGAT-W2-006
+title: JAGAT G7 Product Backlog
+source: jagat-g7-product-backlog
+category: product
+doc_type: md
+owner: Faturachman Al Kahfi
+created_at: 2026-05-20
+trust_level: core_team_verified
+provenance: ops folder — product/UI/commercial task backlog
+sha256: 104677E12702C1325B4FED18317701DF0B371B0F5A25F9EA08955349B0BB4FF8
+notes: Product tasks P-001 to P-008 covering UI, memory library, citation, and enterprise readiness.
+---
+
+# JAGAT G7 Product Backlog
+
+| ID | Phase | Task | Owner | Risiko | Acceptance Criteria | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| P-001 | 2D | Founder dashboard docs. | AI Builder | Founder sulit melihat next action. | Ops folder lengkap dan mudah dibaca. | Done |
+| P-002A | 2D | Login/product front page polish. | Saint + AI Builder | UI terasa statis, terlalu teknis, atau membawa jejak vendor asing. | Login tidak memakai Google/proxy, tidak memakai terminal animation, dan memiliki demo produk animatif yang menjelaskan Riset/Ingest/Memori/Eksekusi. | Done |
+| P-002 | 3A | Ingest UI metadata fields. | Saint + AI Builder | Data masuk tanpa provenance. | UI ingest punya title, source, category, doc_type, owner, created_at, trust_level, provenance, notes. | Done |
+| P-003 | 3E/3G | Memory library view. | Saint | Founder tidak tahu isi Qdrant. | UI menampilkan daftar dokumen/chunk/source setelah embedding massal berjalan. | Planned |
+| P-004 | 3G | Source citation in answer bubble. | Saint + AI Builder | Jawaban sulit dipercaya. | Jawaban RAG menampilkan sumber tanpa memalsukan citation untuk jawaban deduksi. | Done |
+| P-004A | 3B | Strategic document manifest UX. | Saint + AI Builder | Kurasi dokumen tidak terlihat oleh founder. | Ada format manifest dokumen strategis gelombang 1 dengan status curated/hold/reject. | Done |
+| P-005 | 4 | Agent mode selector. | Saint | Pengguna bingung memilih fungsi. | UI membedakan Research, Kiting, Ting, Motherbox. | Planned |
+| P-006 | 5 | Pricing and token usage UX. | Saint | Monetisasi sulit dipahami. | User melihat tier, quota, usage, expiry. | Planned |
+| P-007 | 5 | Admin token operations polish. | Saint + AI Builder | Operasi token manual dan riskan. | Admin bisa create/suspend/extend token. | Planned |
+| P-008 | 6 | Enterprise/Investor deck content. | Saint + Faturachman | Narasi capital expansion belum siap. | Deck menjelaskan infra, moat, roadmap, unit economics. | Planned |
+
+## Product Principle
+
+UI JAGAT harus terasa seperti konsol kerja intelijen: padat, tenang, terstruktur, dan tidak marketing berlebihan.
+
+## Audit Terakhir
+
+Tanggal: 2026-05-20
+
+- Login page sudah dibersihkan dari logo Google dan proxy asing.
+- Panel terminal simulator dihapus dari halaman login.
+- Panel kanan login diganti menjadi demo animatif produk: Riset, Ingest, Memori, Eksekusi.
+- Phase 3A form ingest metadata selesai.
+- Phase 3B manifest kurasi dokumen Wave 1 selesai.
+- Phase 3C extraction report selesai untuk Wave 1.
+- Phase 3D chunk report selesai untuk Wave 1.
+- Phase 3E bulk ingest report selesai untuk Wave 1.
+- Phase 3F backend contextSources siap untuk citation UI.
+- Phase 3G citation rendering selesai untuk bubble jawaban.
+- Sisa polish produk berikutnya: memory library view dan ekspansi korpus Wave 2.

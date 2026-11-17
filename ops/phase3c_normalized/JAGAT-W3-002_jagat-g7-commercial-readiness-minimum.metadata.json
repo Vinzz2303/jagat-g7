@@ -1,0 +1,20 @@
+{
+  "id": "JAGAT-W3-002",
+  "status": "curated",
+  "title": "JAGAT G7 Commercial Readiness Minimum",
+  "source": "jagat-g7-commercial-readiness-minimum",
+  "category": "commercial",
+  "doc_type": "md",
+  "owner": "Faturachman Al Kahfi",
+  "created_at": "2026-06-06",
+  "trust_level": "founder_verified",
+  "provenance": "ops folder — early revenue packages, pricing, delivery scope, and sales boundary",
+  "notes": "Defines paket awal: AI Admin Bot UMKM, Website Cepat, Sovereign Research Assistant, Internal Command Center. Each has pricing, 3-7 day delivery, and risk/legal boundary.",
+  "local_path": "C:\\JAGAT\\ops\\COMMERCIAL_READINESS_MINIMUM.md",
+  "sha256": "A044BB434221DCE3D8B047AE0286887104E1F322C2E0FC392DB7981E7279B820",
+  "size_bytes": 7617,
+  "extraction": {
+    "status": "normalized",
+    "doc_type": "md"
+  }
+}

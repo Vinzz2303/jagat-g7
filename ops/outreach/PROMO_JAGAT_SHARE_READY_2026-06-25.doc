@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <title>JAGAT AI - Share Ready Promo</title>
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; color: #17212b; font-size: 11pt; line-height: 1.5; margin: 28px; }
+    .hero { background: #0f6b5b; color: #fff; padding: 18px 20px; border-radius: 10px; }
+    .hero h1 { margin: 0; font-size: 24pt; }
+    .hero p { margin: 8px 0 0; font-size: 12pt; }
+    h2 { color: #0f6b5b; font-size: 14pt; margin: 18px 0 8px; }
+    h3 { color: #154c6f; font-size: 12pt; margin: 0 0 8px; }
+    .callout { margin: 14px 0; padding: 12px 14px; background: #eef7f5; border-left: 4px solid #0f6b5b; font-weight: bold; }
+    .card { border: 1px solid #d8e0e7; padding: 10px 12px; margin: 8px 0; }
+    ul { margin: 6px 0 6px 18px; }
+    .promo { margin-top: 12px; padding: 12px 14px; background: #f6f8fa; }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <h1>JAGAT AI</h1>
+    <p><strong>Website. Server. AI Solution.</strong><br>JAGAT membantu bisnis yang ingin punya website yang lebih profesional, merapikan sistem digital, dan mulai memakai AI secara praktis.</p>
+  </div>
+
+  <div class="callout">
+    JAGAT adalah partner digital untuk bisnis yang ingin mulai dari website profesional, menyiapkan sistem, lalu bertahap masuk ke penggunaan AI yang nyata.
+  </div>
+
+  <h2>Yang Bisa Kami Bantu</h2>
+
+  <div class="card">
+    <h3>Website Bisnis</h3>
+    <ul>
+      <li>company profile</li>
+      <li>landing page promosi</li>
+      <li>form inquiry / lead</li>
+      <li>integrasi WhatsApp / email</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Server dan Sistem Dasar</h3>
+    <ul>
+      <li>setup sistem digital awal</li>
+      <li>backend / workspace sederhana</li>
+      <li>alur akses dan deployment dasar</li>
+      <li>pondasi untuk pengembangan lanjut</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Solusi AI Praktis</h3>
+    <ul>
+      <li>AI admin untuk FAQ</li>
+      <li>AI assistant baca dokumen</li>
+      <li>AI support ringkasan dan laporan</li>
+      <li>AI workflow sederhana</li>
+    </ul>
+  </div>
+
+  <h2>Cocok Untuk</h2>
+  <p>UMKM, jasa lokal, sekolah atau kursus, agency, klinik kecil, bisnis keluarga, dan tim kecil yang ingin mulai masuk ke AI tanpa harus membangun tim teknis besar.</p>
+
+  <h2>Kenapa JAGAT</h2>
+  <p>Karena banyak bisnis hari ini tidak hanya butuh desain atau website. Bisnis juga butuh sistem yang lebih rapi, alur kerja yang lebih efisien, dan kesiapan masuk ke era AI. JAGAT hadir untuk membantu dari tahap awal, secara bertahap, sesuai kebutuhan bisnis.</p>
+
+  <h2>Kalimat Promosi Siap Kirim</h2>
+  <div class="promo">
+    Sekarang saya lagi bangun JAGAT, fokusnya bantu bisnis lewat website, server, dan solusi AI yang praktis. Jadi kalau ada yang butuh bikin website, rapihin sistem, atau mulai pakai AI untuk bisnisnya, insyaAllah bisa kita bantu dari yang ringan dulu.
+  </div>
+
+  <p style="margin-top:16px;color:#61707d;">Mulai dari kebutuhan sederhana dulu, lalu berkembang sesuai skala bisnis.</p>
+</body>
+</html>

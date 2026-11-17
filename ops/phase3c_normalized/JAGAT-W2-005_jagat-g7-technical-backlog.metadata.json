@@ -1,0 +1,20 @@
+{
+  "id": "JAGAT-W2-005",
+  "status": "curated",
+  "title": "JAGAT G7 Technical Backlog",
+  "source": "jagat-g7-technical-backlog",
+  "category": "infrastructure",
+  "doc_type": "md",
+  "owner": "Faturachman Al Kahfi",
+  "created_at": "2026-05-20",
+  "trust_level": "core_team_verified",
+  "provenance": "ops folder — cross-phase technical task backlog with audit records",
+  "notes": "Technical tasks T-001 to T-012 spanning Phase 2A through Phase 4A.",
+  "local_path": "C:\\JAGAT\\ops\\TECHNICAL_BACKLOG.md",
+  "sha256": "973E3C647086DA753BD5DF5A1230628F2E7E5AD1BCC66BCB07A47A1F039FD7E2",
+  "size_bytes": 4127,
+  "extraction": {
+    "status": "normalized",
+    "doc_type": "md"
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "phase": "3E",
+  "wave": 2,
+  "generated_at": "2026-05-25T16:15:20.183Z",
+  "mode": "force-ingest",
+  "collection": "jagat_indonesia_knowledge",
+  "collection_state": "existing",
+  "embedding_model": "nomic-embed-text",
+  "embedding_dim": 768,
+  "source_chunks": "ops\\phase3d_chunks\\wave2_chunks.json",
+  "chunks_total": 137,
+  "existing_points_before": 0,
+  "points_embedded": 137,
+  "points_upserted": 137,
+  "points_skipped": 0,
+  "failures": [],
+  "documents": [
+    {
+      "document_id": "JAGAT-W2-001",
+      "title": "JAGAT G7 Execution Masterplan",
+      "source": "jagat-g7-execution-masterplan",
+      "category": "roadmap",
+      "doc_type": "md",
+      "chunks": 29
+    },
+    {
+      "document_id": "JAGAT-W2-002",
+      "title": "JAGAT G7 Tim Inti dan Struktur Komando",
+      "source": "jagat-g7-team-structure",
+      "category": "founder_note",
+      "doc_type": "md",
+      "chunks": 16
+    },
+    {
+      "document_id": "JAGAT-W2-003",
+      "title": "JAGAT G7 Decision Log",
+      "source": "jagat-g7-decision-log",
+      "category": "decision",
+      "doc_type": "md",
+      "chunks": 16
+    },
+    {
+      "document_id": "JAGAT-W2-004",
+      "title": "JAGAT G7 Risk Register",
+      "source": "jagat-g7-risk-register",
+      "category": "risk",
+      "doc_type": "md",
+      "chunks": 10
+    },
+    {
+      "document_id": "JAGAT-W2-005",
+      "title": "JAGAT G7 Technical Backlog",
+      "source": "jagat-g7-technical-backlog",
+      "category": "infrastructure",
+      "doc_type": "md",
+      "chunks": 16
+    },
+    {
+      "document_id": "JAGAT-W2-006",
+      "title": "JAGAT G7 Product Backlog",
+      "source": "jagat-g7-product-backlog",
+      "category": "product",
+      "doc_type": "md",
+      "chunks": 9
+    },
+    {
+      "document_id": "JAGAT-W2-007",
+      "title": "JAGAT G7 Weekly Execution Loop",
+      "source": "jagat-g7-weekly-execution-loop",
+      "category": "roadmap",
+      "doc_type": "md",
+      "chunks": 6
+    },
+    {
+      "document_id": "JAGAT-W2-008",
+      "title": "JAGAT G7 Execution Map 30/60/90 Days",
+      "source": "jagat-g7-execution-map-30-60-90",
+      "category": "roadmap",
+      "doc_type": "md",
+      "chunks": 4
+    },
+    {
+      "document_id": "JAGAT-W2-009",
+      "title": "JAGAT G7 Phase 3 Memory Ingestion Plan",
+      "source": "jagat-g7-phase3-memory-ingestion-plan",
+      "category": "blueprint",
+      "doc_type": "md",
+      "chunks": 21
+    },
+    {
+      "document_id": "JAGAT-W2-010",
+      "title": "JAGAT G7 Phase 3B Strategic Document Manifest",
+      "source": "jagat-g7-phase3b-strategic-manifest",
+      "category": "blueprint",
+      "doc_type": "md",
+      "chunks": 10
+    }
+  ]
+}

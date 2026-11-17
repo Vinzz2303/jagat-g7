@@ -1,0 +1,67 @@
+{
+  "phase": "3C",
+  "manifest_id": "jagat-g7-phase3-wave1-founder-strategic-core",
+  "generated_at": "2026-05-21T07:07:46.567Z",
+  "policy": {
+    "ingest_performed": false,
+    "next_phase": "3D"
+  },
+  "results": [
+    {
+      "id": "JAGAT-W1-001",
+      "title": "JAGAT G7 Technical Blueprint",
+      "source": "jagat-g7-technical-blueprint",
+      "category": "blueprint",
+      "doc_type": "pdf",
+      "status": "normalized",
+      "local_path": "C:\\Users\\Administrator\\Downloads\\JAGAT_G7_Technical_Blueprint.pdf",
+      "normalized_path": "ops\\phase3c_normalized\\JAGAT-W1-001_jagat-g7-technical-blueprint.txt",
+      "metadata_path": "ops\\phase3c_normalized\\JAGAT-W1-001_jagat-g7-technical-blueprint.metadata.json",
+      "sha256_match": true,
+      "char_count": 17745,
+      "word_count": 2416,
+      "chars_per_page": 1365,
+      "page_count": 13,
+      "text_extraction_chars": 17745,
+      "ocr_used": false
+    },
+    {
+      "id": "JAGAT-W1-002",
+      "title": "JAGAT G7 Sovereign Roadmap",
+      "source": "jagat-g7-sovereign-roadmap",
+      "category": "roadmap",
+      "doc_type": "pdf",
+      "status": "normalized",
+      "local_path": "C:\\Users\\Administrator\\Downloads\\JAGAT G7 Sovereign Roadmap.pdf",
+      "normalized_path": "ops\\phase3c_normalized\\JAGAT-W1-002_jagat-g7-sovereign-roadmap.txt",
+      "metadata_path": "ops\\phase3c_normalized\\JAGAT-W1-002_jagat-g7-sovereign-roadmap.metadata.json",
+      "sha256_match": true,
+      "char_count": 3896,
+      "word_count": 631,
+      "chars_per_page": 300,
+      "page_count": 13,
+      "text_extraction_chars": 0,
+      "ocr_used": true
+    },
+    {
+      "id": "JAGAT-W1-003",
+      "title": "JAGAT G7 Project Milestones V5",
+      "source": "jagat-g7-project-milestones-v5",
+      "category": "milestone",
+      "doc_type": "xlsx",
+      "status": "normalized",
+      "local_path": "C:\\Users\\Administrator\\Downloads\\JAGAT_G7_Project_Milestones_V5.xlsx",
+      "normalized_path": "ops\\phase3c_normalized\\JAGAT-W1-003_jagat-g7-project-milestones-v5.txt",
+      "metadata_path": "ops\\phase3c_normalized\\JAGAT-W1-003_jagat-g7-project-milestones-v5.metadata.json",
+      "sha256_match": true,
+      "char_count": 5944,
+      "word_count": 1057,
+      "chars_per_page": null,
+      "sheet_count": 2,
+      "sheets": [
+        "Ringkasan & Dashboard",
+        "Matriks Milestone"
+      ]
+    }
+  ]
+}

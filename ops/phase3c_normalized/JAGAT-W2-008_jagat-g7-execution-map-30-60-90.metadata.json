@@ -1,0 +1,20 @@
+{
+  "id": "JAGAT-W2-008",
+  "status": "curated",
+  "title": "JAGAT G7 Execution Map 30/60/90 Days",
+  "source": "jagat-g7-execution-map-30-60-90",
+  "category": "roadmap",
+  "doc_type": "md",
+  "owner": "Faturachman Al Kahfi",
+  "created_at": "2026-05-20",
+  "trust_level": "founder_verified",
+  "provenance": "ops folder — strategic 30/60/90 day execution targets",
+  "notes": "30-day: stabilize brain + knowledge. 60-day: auditable memory. 90-day: agent boundary + commercial.",
+  "local_path": "C:\\JAGAT\\ops\\EXECUTION_MAP_30_60_90.md",
+  "sha256": "1F1E7B6EB46EF4CEEA2748D92705B918286B3592C2CD2E746D9F59F485420D97",
+  "size_bytes": 2939,
+  "extraction": {
+    "status": "normalized",
+    "doc_type": "md"
+  }
+}

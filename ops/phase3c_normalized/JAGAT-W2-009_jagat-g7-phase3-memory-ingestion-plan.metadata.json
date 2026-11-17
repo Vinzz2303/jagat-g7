@@ -1,0 +1,20 @@
+{
+  "id": "JAGAT-W2-009",
+  "status": "curated",
+  "title": "JAGAT G7 Phase 3 Memory Ingestion Plan",
+  "source": "jagat-g7-phase3-memory-ingestion-plan",
+  "category": "blueprint",
+  "doc_type": "md",
+  "owner": "Faturachman Al Kahfi",
+  "created_at": "2026-05-20",
+  "trust_level": "founder_verified",
+  "provenance": "ops folder — detailed Phase 3 execution plan with 7 subfases",
+  "notes": "Master plan for sovereign memory ingestion covering 3A-3G subfases with evidence and acceptance criteria.",
+  "local_path": "C:\\JAGAT\\ops\\PHASE_3_MEMORY_INGESTION_PLAN.md",
+  "sha256": "086FEDDB6941061473DB4BB5E72E6F47D635F3D5F97F1EEC005EE54A0D7F011E",
+  "size_bytes": 15307,
+  "extraction": {
+    "status": "normalized",
+    "doc_type": "md"
+  }
+}

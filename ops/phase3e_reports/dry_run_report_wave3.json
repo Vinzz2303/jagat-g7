@@ -1,0 +1,75 @@
+{
+  "phase": "3E",
+  "wave": 3,
+  "generated_at": "2026-06-07T17:08:49.872Z",
+  "mode": "dry-run",
+  "collection": "jagat_indonesia_knowledge",
+  "collection_state": "existing",
+  "embedding_model": "nomic-embed-text",
+  "embedding_dim": 768,
+  "source_chunks": "ops\\phase3d_chunks\\wave3_chunks.json",
+  "chunks_total": 131,
+  "existing_points_before": 131,
+  "points_embedded": 0,
+  "points_upserted": 0,
+  "points_skipped": 131,
+  "failures": [],
+  "documents": [
+    {
+      "document_id": "JAGAT-W3-001",
+      "title": "JAGAT G7 Agent Boundary Design — Phase 4",
+      "source": "jagat-g7-agent-boundary-design",
+      "category": "product",
+      "doc_type": "md",
+      "chunks": 32
+    },
+    {
+      "document_id": "JAGAT-W3-002",
+      "title": "JAGAT G7 Commercial Readiness Minimum",
+      "source": "jagat-g7-commercial-readiness-minimum",
+      "category": "commercial",
+      "doc_type": "md",
+      "chunks": 20
+    },
+    {
+      "document_id": "JAGAT-W3-003",
+      "title": "JAGAT Garuda Ladder — Model Classification System",
+      "source": "jagat-garuda-ladder",
+      "category": "infrastructure",
+      "doc_type": "md",
+      "chunks": 13
+    },
+    {
+      "document_id": "JAGAT-W3-004",
+      "title": "Garuda Ladder Benchmark Results — 7B vs 14B",
+      "source": "jagat-garuda-ladder-results",
+      "category": "infrastructure",
+      "doc_type": "md",
+      "chunks": 22
+    },
+    {
+      "document_id": "JAGAT-W3-005",
+      "title": "JAGAT G7 Cognitive Pipeline Audit",
+      "source": "jagat-g7-cognitive-pipeline-audit",
+      "category": "infrastructure",
+      "doc_type": "md",
+      "chunks": 19
+    },
+    {
+      "document_id": "JAGAT-W3-006",
+      "title": "Next Strategic Actions — PM Priority 2026-06-06",
+      "source": "jagat-g7-next-strategic-actions",
+      "category": "founder_note",
+      "doc_type": "md",
+      "chunks": 14
+    },
+    {
+      "document_id": "JAGAT-W3-007",
+      "title": "Remote Model Worker B — Operational Runbook",
+      "source": "jagat-remote-model-worker-b-runbook",
+      "category": "infrastructure",
+      "doc_type": "md",
+      "chunks": 11
+    }
+  ]
+}

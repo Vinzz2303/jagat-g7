@@ -1,0 +1,42 @@
+{
+  "phase": "3E",
+  "generated_at": "2026-05-21T14:24:26.111Z",
+  "mode": "dry-run",
+  "collection": "jagat_indonesia_knowledge",
+  "collection_state": "existing",
+  "embedding_model": "nomic-embed-text",
+  "embedding_dim": 768,
+  "source_chunks": "ops\\phase3d_chunks\\wave1_chunks.json",
+  "chunks_total": 55,
+  "existing_points_before": 55,
+  "points_embedded": 0,
+  "points_upserted": 0,
+  "points_skipped": 55,
+  "failures": [],
+  "documents": [
+    {
+      "document_id": "JAGAT-W1-001",
+      "title": "JAGAT G7 Technical Blueprint",
+      "source": "jagat-g7-technical-blueprint",
+      "category": "blueprint",
+      "doc_type": "pdf",
+      "chunks": 14
+    },
+    {
+      "document_id": "JAGAT-W1-002",
+      "title": "JAGAT G7 Sovereign Roadmap",
+      "source": "jagat-g7-sovereign-roadmap",
+      "category": "roadmap",
+      "doc_type": "pdf",
+      "chunks": 10
+    },
+    {
+      "document_id": "JAGAT-W1-003",
+      "title": "JAGAT G7 Project Milestones V5",
+      "source": "jagat-g7-project-milestones-v5",
+      "category": "milestone",
+      "doc_type": "xlsx",
+      "chunks": 31
+    }
+  ]
+}
